@@ -512,7 +512,40 @@ var MenuLayer = cc.Layer.extend
     
     initRecord:function()
     {
-    	
+	    this.layerRecord = cc.Layer.create();
+	    
+	    var sprRecord = cc.Sprite.create(s_record_png);
+	    sprRecord.setPosition(cc.p(450, 300));
+	    this.layerRecord.addChild(sprRecord);
+	    
+	    var sprNormalHighest = cc.Sprite.create(s_highscore_png);
+	    var sprHardcordHighest = cc.Sprite.create(s_highscore_hard_png);
+
+	    sprNormalHighest.setPosition(cc.p(500, 200));
+	    sprHardcordHighest.setPosition(cc.p(750, 200));
+	    
+	    sprNormalHighest.setScale(0.6);
+	    sprHardcordHighest.setScale(0.6);
+	    
+	    this.layerRecord.addChild(sprNormalHighest);
+	    this.layerRecord.addChild(sprHardcordHighest);
+	    
+	    // char buf[] = {0};
+	    // sprintf(buf, "%d", GameData::highestNormalScore);
+	    
+	    var labelNormalScore = cc.LabelBMFont.create(/*buf*/GameData.highestNormalScore, s_bmfontCB64_fnt);
+	    labelNormalScore.setPosition(cc.p(500, 120));
+	    labelNormalScore.setColor(cc.c3b(255, /*233*/255, 0));
+	    this.layerRecord.addChild(labelNormalScore);
+
+//	    sprintf(buf, "%d", GameData::highestHardcoreScore);
+	    var labelHardcoreScore = cc.LabelBMFont.create(/*buf*/GameData.highestHardcoreScore, s_bmfontCB64_fnt);
+	    labelHardcoreScore.setPosition(cc.p(750, 120));
+	    labelHardcoreScore.setColor(cc.c3b(255, /*25*/0, 0));
+	    this.layerRecord.addChild(labelHardcoreScore);
+	    
+	    this.layerRecord.setVisible(false);
+	    this.addChild(this.layerRecord); 	
     },
     
     initBalloon:function()
