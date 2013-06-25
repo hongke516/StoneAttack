@@ -508,7 +508,7 @@ var MenuLayer = cc.Layer.extend
 	        this.menuBtnSetting.setEnabled(false);
 	    }
 	    this.addChild(this.menuBtnSetting);
-    },//////asdf
+    },
     
     initRecord:function()
     {
