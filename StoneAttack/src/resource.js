@@ -193,7 +193,7 @@ var g_ressources = [
     //tmx
 
     //bgm, soundEffect
-    {src:s_itemgot_wav},
+//    {src:s_itemgot_wav},
 	{src:s_pong_wav},
 	{src:s_puck_mp3},
   	{src:s_BGM1_fast_mp3},

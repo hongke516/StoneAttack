@@ -1,6 +1,10 @@
 (function() {
 	"use strict";
 
+	var ccp = cc.p;
+	var ccc4 = cc.c4b;
+	var ccc3 = cc.c3b;
+
 	var GameData =
 	{
 		// int
@@ -8,6 +12,7 @@
 		currentBgmNumber: 0,
 		isHardCore: false,
 		isMusicSound: true,
+		isSoundEffect: true,
 
 		HighScore:
 		{
