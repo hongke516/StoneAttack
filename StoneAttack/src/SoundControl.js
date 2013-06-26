@@ -14,9 +14,9 @@
 			s_BGM3_fast_mp3,
 			s_BGM3_normal_mp3,
 			s_BGM4_fast_mp3,
-			s_itemgot_mp3: s_itemgot_mp3,
-			s_pong_mp3: s_pong_mp3,
-			s_puck_mp3: s_puck_mp3
+			s_itemgot_mp3,
+			s_pong_mp3,
+			s_puck_mp3
 		],
 
 		Sound: {
