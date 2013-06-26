@@ -82,7 +82,7 @@ var GameLayer = cc.Layer.extend
 	    this.initSpriteStateBar();
 	    this.initBMFont();
 	    this.initLayerParticle();
-	    this.initLayerFlash();
+//	    this.initLayerFlash();
 	    this.initOptionBox();
 	    this.initGameover();
 

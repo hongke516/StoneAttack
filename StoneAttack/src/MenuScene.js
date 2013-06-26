@@ -1070,13 +1070,13 @@ var MenuLayer = cc.Layer.extend
     {
     	if(GameData.isSoundEffect)
     	{
-    		cc.AudioEngine.getInstance().playEffect(fileName);
+    		SoundControl.Sound[fileName].play();
     	}
     },
     
     startBackgroundMusic:function()
     {
-	    cc.AudioEngine.getInstance().playMusic(s_BGM1_normal_mp3);	
+	    SoundControl.Sound[s_BGM1_normal_mp3].play();	
     },
     
     saveFile:function()
