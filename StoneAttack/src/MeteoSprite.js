@@ -21,9 +21,9 @@ var MeteoSprite = cc.Sprite.extend({
 
 	create: function() {
 		var pobSprite = new MeteoSprite();
+		pobSprite.construct();
 		var randNum = Math.floor(Math.random() * 10 % 4);
 		if(pobSprite && pobSprite.initWithFile(randNum == 0 ? 'metheo1.png' : randNum == 1 ? 'metheo2.png' : randNum == 3 ? 'metheo3.png' : 'metheo4.png')) {
-			pobSprite.autoRelease();
 			return pobSprite;
 		}
 
@@ -32,11 +32,11 @@ var MeteoSprite = cc.Sprite.extend({
 	},
 
 	createShield: function(x) {
-		var pobSprite = new MeteoSprite(x);
+		var pobSprite = new MeteoSprite();
+		pobSprite.construct(x);
 		if(pobSprite && pobSprite.initWithFile('shield.png')) {
 			pobSprite.isShield = true;
 			pobSprite.dropSpeed = 4;
-			pobSprite.autoRelease();
 			return pobSprite;
 		}
 
@@ -46,10 +46,10 @@ var MeteoSprite = cc.Sprite.extend({
 
 	createHp: function() {
 		var pobSprite = new MeteoSprite();
+		pobSprite.construct();
 		if(pobSprite && pobSprite.initWithFile('life.png')) {
 			pobSprite.isHp = true;
 			pobSprite.dropSpeed = 4;
-			pobSprite.autoRelease();
 			return pobSprite;
 		}
 

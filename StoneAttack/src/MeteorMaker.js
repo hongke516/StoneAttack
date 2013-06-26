@@ -21,13 +21,12 @@ var MeteorMaker = cc.Class.extend({
 	},
 
 	newInstance: function(currentX) {
-		// GameScene::gameScene->makeMeteor(currentX);
+		gameData.gameScene.makeMeteor(currentX);
 	},
 
 	create: function(x) {
 		var pobInstance = new MeteorMaker(x ? x : Math.floor(Math.random() * 1000 % 360));
 		if(pobInstance) {
-			pobInstance.autoRelease();
 			return pobInstance;
 		}
 
