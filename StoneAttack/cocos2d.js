@@ -49,6 +49,7 @@
             'src/MeteorMaker.js',
             'src/ParticleExplosionSprite.js',
             'src/GameCache.js',
+            'src/SoundControl.js',
             ///add your own files in order here
         ]
     };
@@ -87,6 +88,8 @@
         document.ccConfig = c;
         s.id = 'cocos2d-html5';
         d.body.appendChild(s);
+
+        window.SoundControl.Load();
         //else if single file specified, load singlefile
     });
 })();
