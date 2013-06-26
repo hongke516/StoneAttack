@@ -88,8 +88,6 @@
         document.ccConfig = c;
         s.id = 'cocos2d-html5';
         d.body.appendChild(s);
-
-        window.SoundControl.Load();
         //else if single file specified, load singlefile
     });
 })();
