@@ -82,4 +82,6 @@
 			this.Sound[soundName].pause();
 		}
 	};
+
+	window.SoundControl = SoundControl;
 })();
