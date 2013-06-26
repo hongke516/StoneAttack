@@ -33,6 +33,8 @@ var RatingLayer = cc.Layer.extend
         
         this.schedule(this.nextScene, 0.0, false, 2.0);
         
+        GameCache.load();
+        
         return true;
     },
     
