@@ -1076,6 +1076,14 @@ var MenuLayer = cc.Layer.extend
     
     startBackgroundMusic:function()
     {
+    	SoundControl.Sound[s_BGM1_normal_mp3].stop();
+    	SoundControl.Sound[s_BGM1_fast_mp3].stop();
+    	SoundControl.Sound[s_BGM2_normal_mp3].stop();
+    	SoundControl.Sound[s_BGM2_fast_mp3].stop();
+    	SoundControl.Sound[s_BGM3_normal_mp3].stop();
+    	SoundControl.Sound[s_BGM3_fast_mp3].stop();
+    	SoundControl.Sound[s_BGM4_fast_mp3].stop();
+    	
 	    SoundControl.Sound[s_BGM1_normal_mp3].play();	
     },
     

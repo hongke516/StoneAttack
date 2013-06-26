@@ -225,7 +225,7 @@ var GameLayer = cc.Layer.extend
 	{
 	    this.layerParticle = cc.Layer.create();
 	    this.layerParticle.setAnchorPoint(ccp(0.5, 1.0 / 600 * GameData.planetCenterY));
-	    this.layerParticle.setRotation(this.playerX);
+	    this.layerParticle.setRotation(GameData.playerX);
 	    this.addChild(this.layerParticle, 5);
 	},
 	
@@ -250,6 +250,8 @@ var GameLayer = cc.Layer.extend
 	    var menuItemResume = cc.MenuItemImage.create(s_menu2_1_png, s_menu2_1_off_png, this.clickBtnResume, this);
 	    var menuItemRestart = cc.MenuItemImage.create(s_menu2_2_png, s_menu2_2_off_png, this.clickBtnRestart, this);
 	    var menuItemExit = cc.MenuItemImage.create(s_menu2_3_png, s_menu2_3_off_png, this.clickBtnExit, this);
+	    
+	    
 	    
 	    menuItemResume.setScale(0.7);
 	    menuItemExit.setScale(0.7);
