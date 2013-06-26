@@ -20,7 +20,14 @@
 			Hardcore: 0,
 
 			SavedVersion: 1
-		}
+		},
+		
+		// GameScene
+		
+		playerX: 0,
+		gameScene: null,
+		currentScore: 0,
+		
 	};
 /*	
 	var cosTable = [], sinTable = [];
@@ -32,30 +39,90 @@
 */
 	// ADD CONSTANTS
 	Object.defineProperties(GameData, {
-		'STATE_PLAYING': {
+		'STATE_PLAYING':
+		{
 			value: 1,
 			writable: false
 		},
-		'STATE_PAUSE': {
+		'STATE_PAUSE':
+		{
 			value: 2,
 			writable: false
 		},
-		'STATE_GAMEOVER': {
+		'STATE_GAMEOVER':
+		{
 			value: 3,
 			writable: false
 		},
-		'STATE_MENU': {
+		'STATE_MENU':
+		{
 			value: 4,
 			writable: false
 		},
-		'STATE_RECORD': {
+		'STATE_RECORD':
+		{
 			value: 5,
 			writable: false
 		},
-		'STATE_INTRO': {
+		'STATE_INTRO':
+		{
 			value: 6,
 			writable: false
 		}
+	})
+	
+		// ADD CONSTANTS
+	Object.defineProperties(GameData, {
+		'planetCenterX':
+		{
+			value: 450,
+			writable: false
+		},
+		'planetCenterY':
+		{
+			value: 100,
+			writable: false
+		},
+		'playerRectX1':
+		{
+			value: 440,
+			writable: false
+		},
+		'playerRectX2':
+		{
+			value: 460,
+			writable: false
+		},
+		'playerRectY1':
+		{
+			value: 250,
+			writable: false
+		},
+		'playerRectY2':
+		{
+			value: 305,
+			writable: false
+		},
+		'shieldX':
+		{
+			value: 450,
+			writable: false
+		},
+		'shieldY':
+		{
+			value: 280,
+			writable: false
+		},
+		'HP_MAX':
+		{
+			value: 1500,
+			writable: false
+		},
+		'remainHitCoolTimeMax':
+		{
+			value: 120, // 95
+			writable: false
+		},
 	})
 
 	Object.defineProperty(GameData, 'SCORE_VERSION', { value : 1, writable: false });

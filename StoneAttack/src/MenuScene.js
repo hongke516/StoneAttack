@@ -549,66 +549,106 @@ var MenuLayer = cc.Layer.extend
 	        GameData.gameState = GameData.STATE_MENU;
 	        return;
     	}
-    	
-        if(this.runMode != 0)
-        {
-            return;
-        }
-        if(this.isOptionPanel)
-        {
-            return;
-        }
-        
-        if(GameData.gameState == GameData.STATE_RECORD)
-        {
-            if(this.sprPlanet.getPositionX() != 200)
-            {
-                return;
-            }
-            this.startSoundEffect(s_pong_wav);
-            this.schedule(this.updateRecordAnimation);
-            this.layerRecord.setVisible(false);
-            this.labelVersion.setVisible(false);
-            GameData.gameState = GameData.STATE_MENU;
-            return;
-        }
-        
-        if(this.menu1.getOpacity() != 255 || this.sprPlanet.getPositionX() != 450)
-        {
-            return;
-        }
-
-        this.menu1.setEnabled(false);
-        this.menu2.setEnabled(false);
-        this.menu3.setEnabled(false);
-        this.menu4.setEnabled(false);
-        /*
-        int x = (CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView())).x;
-        if(x>450)
-        {
-            runMode = -2;
-            this->schedule(schedule_selector(MenuScene::leftGesture));
-        }
-        else
-        {
-            runMode = 2;
-            this->schedule(schedule_selector(MenuScene::rightGesture));
-        }
-        */
-    	switch(e)
+    	else
     	{
-    		case cc.KEY.left:
-    			this.runMode = 2;
-    			this.schedule(this.rightGesture);
-    			break;	
-    		case cc.KEY.right:
-    			this.runMode = -2;
-    			this.schedule(this.leftGesture);
-    			break;	
-    	}       
-       
-        this.unschedule(this.updateBalloon);
-        this.sprBalloon.setVisible(false);    	
+	        if(this.runMode != 0)
+	        {
+	            return;
+	        }
+	        if(this.isOptionPanel)
+	        {
+	        	if(e == cc.KEY.escape)
+	        	{
+	        		this.clickOptionExit();
+	        	}
+	            return;
+	        }
+	        
+	        if(GameData.gameState == GameData.STATE_RECORD)
+	        {
+	            if(this.sprPlanet.getPositionX() != 200)
+	            {
+	                return;
+	            }
+	            this.startSoundEffect(s_pong_wav);
+	            this.schedule(this.updateRecordAnimation);
+	            this.layerRecord.setVisible(false);
+	            this.labelVersion.setVisible(false);
+	            GameData.gameState = GameData.STATE_MENU;
+	            return;
+	        }
+	        
+	        if(this.menu1.getOpacity() != 255 || this.sprPlanet.getPositionX() != 450)
+	        {
+	            return;
+	        }
+	
+	        /*
+	        int x = (CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView())).x;
+	        if(x>450)
+	        {
+	            runMode = -2;
+	            this->schedule(schedule_selector(MenuScene::leftGesture));
+	        }
+	        else
+	        {
+	            runMode = 2;
+	            this->schedule(schedule_selector(MenuScene::rightGesture));
+	        }
+	        */
+	       
+    		if(e != cc.KEY.left && e != cc.KEY.right && e != cc.KEY.space && e != cc.KEY.enter && e != cc.KEY.escape)
+    		{
+    			return;
+    		}    		
+    			       
+	    	switch(e)
+	    	{
+	    		case cc.KEY.left:
+	    			this.runMode = 2;
+	    			this.schedule(this.rightGesture);
+	    			this.startSoundEffect(s_pong_wav);
+	    		    this.unschedule(this.updateBalloon);
+	    		    this.sprBalloon.setVisible(false);
+			        this.menu1.setEnabled(false);
+			        this.menu2.setEnabled(false);
+			        this.menu3.setEnabled(false);
+			        this.menu4.setEnabled(false);		    		    			
+	    			break;	
+	    		case cc.KEY.right:
+	    			this.runMode = -2;
+	    			this.schedule(this.leftGesture);
+	    			this.startSoundEffect(s_pong_wav);
+			        this.unschedule(this.updateBalloon);
+		    	    this.sprBalloon.setVisible(false);
+			        this.menu1.setEnabled(false);
+			        this.menu2.setEnabled(false);
+			        this.menu3.setEnabled(false);
+			        this.menu4.setEnabled(false);		    	        		    			
+	    			break;
+	    		case cc.KEY.escape:
+	    			this.clickBtnOption();
+	    			break;
+	    		case cc.KEY.space:
+	    		case cc.KEY.enter:
+	    			switch(this.currentAngle)
+	    			{
+	    				case 0:
+	    					this.clickNormalMode();
+	   	    				break;
+	    				case 90:
+	    					this.clickRecord();
+		    				break;
+	    				case 180:
+	    					this.clickInfo();
+	    					break;
+	    				case 270:
+	    					this.clickHardcoreMode();
+	    					break;	
+	    			}
+		    		break;
+	    	}      
+		}
     },
     
     /*
@@ -768,7 +808,8 @@ var MenuLayer = cc.Layer.extend
     initOptionBox:function()
     {
 	    this.layerOptionBox = cc.LayerColor.create();
-	    this.layerOptionBox.setColor(cc.c4b(0, 0, 0, 100));
+	    this.layerOptionBox.setColor(cc.c3b(0, 0, 0));
+	    this.layerOptionBox.setOpacity(100);
 	    this.layerOptionBox.setVisible(false);
 	    
 	    var sprOptionBox = cc.Sprite.create(s_settingPanel_png);
@@ -868,7 +909,7 @@ var MenuLayer = cc.Layer.extend
 	        this.layerBgmChoice.setVisible(false);
 	    }
 	    
-	    if(GameData.isEffectSound)
+	    if(GameData.isSoundEffect)
 	    {
 	        btn2_1 = cc.MenuItemImage.create(s_on_png, s_off_png);
 	        btn2_2 = cc.MenuItemImage.create(s_off_png, s_on_png);
@@ -1030,7 +1071,8 @@ var MenuLayer = cc.Layer.extend
     	if(GameData.isSoundEffect)
     	{
     		cc.AudioEngine.getInstance().playEffect(fileName);
-    	}	
+    	}
+    	cc.log(GameData.isSoundEffect + "");	
     },
     
     startBackgroundMusic:function()
