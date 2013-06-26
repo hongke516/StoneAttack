@@ -98,7 +98,8 @@ var MenuLayer = cc.Layer.extend
     
     clickInfo:function()
     {
-    	
+    	var win = window.open('http://fb.com/StoneAttack', 'fb_stoneattack');
+    	win.focus();
     },
     
     clickRecord:function()
