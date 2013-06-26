@@ -100,7 +100,7 @@ var GameLayer = cc.Layer.extend
    
     initSpriteBackground:function()
     {
-    	var sprBackground = cc.Sprite.create("res/GameScene_background.png");
+    	var sprBackground = cc.Sprite.create(s_GameScene_background_png);
     	sprBackground.setScale(1.5);
     	sprBackground.setPosition(cc.p(450, 300));
     	this.addChild(sprBackground);	
@@ -108,7 +108,7 @@ var GameLayer = cc.Layer.extend
 	
     initSpritePlanet:function()
     {
-    	this.sprPlanet = cc.Sprite.create("res/planet.png");
+    	this.sprPlanet = cc.Sprite.create(s_planet_png);
     	this.sprPlanet.setPosition(cc.p(450, 100));
     	this.sprPlanet.setRotation(this.currentAngle);
     	this.addChild(this.sprPlanet);
@@ -116,7 +116,7 @@ var GameLayer = cc.Layer.extend
 	
     initSpriteCharacter:function()
     {
-    	this.sprCharacter = cc.Sprite.create("res/player_stand.png");
+    	this.sprCharacter = cc.Sprite.create(s_player_stand_png);
     	this.sprCharacter.setScale(0.75);
     	this.sprCharacter.setPosition(cc.p(450, 277));
     	this.addChild(this.sprCharacter);
@@ -125,135 +125,134 @@ var GameLayer = cc.Layer.extend
 	initSpriteStateBar:function()
 	{
 	    this.sprHpBar = cc.Sprite.create(s_gauge_png);
-	    this.sprHpBar.setPosition(ccp(420, planetCenterY + 115));
+	    this.sprHpBar.setPosition(ccp(420, GameData.planetCenterY + 115));
 	    this.sprHpBar.setAnchorPoint(ccp(0, 0));
 	    this.sprHpBar.setScale(0.33);
 	    this.sprHpBar.setVisible(false);
-	    this.addChild(sprHpBar, 8);
+	    this.addChild(this.sprHpBar, 8);
 	    
-	    sprHpFrame = CCSprite::create("gaugebar.png");
-	    sprHpFrame.setPosition(ccp(395, planetCenterY + 115));
-	    sprHpFrame.setAnchorPoint(ccp(0, 0));
-	    sprHpFrame.setScale(0.33f);
-	    sprHpFrame.setVisible(false);
-	    this.addChild(sprHpFrame, 8);
+	    this.sprHpFrame = cc.Sprite.create(s_gaugebar_png);
+	    this.sprHpFrame.setPosition(ccp(395, GameData.planetCenterY + 115));
+	    this.sprHpFrame.setAnchorPoint(ccp(0, 0));
+	    this.sprHpFrame.setScale(0.33);
+	    this.sprHpFrame.setVisible(false);
+	    this.addChild(this.sprHpFrame, 8);
 	    /*
 	     sprMpBar = CCSprite::create("MpGauge.png");
 	     sprMpBar.setPosition(ccp(500, 320));
 	     sprMpBar.setAnchorPoint(ccp(0, 0));
 	     this.addChild(sprMpBar);
 	     */
-	    CCSize barSize = sprHpBar.getContentSize();
-	    stateBarWidth = barSize.width;
-	    stateBarHeight = barSize.height;
+	    var barSize = this.sprHpBar.getContentSize();
+	    this.stateBarWidth = barSize.width;
+	    this.stateBarHeight = barSize.height;
 	},
 	
-	void GameScene::initBMFont()
+	initBMFont:function()
 	{
+	    this.layerCombo = cc.Layer.create();
 	    
-	    layerCombo = CCLayer::create();
+	    this.labelCombo = cc.LabelBMFont.create("Combo", s_bmfontCB64_fnt);
+	    this.labelCombo.setPosition(ccp(GameData.planetCenterX, GameData.planetCenterY + 75));
+	    this.labelCombo.setColor(cc.c3b(255, 255, 0));
+	    this.layerCombo.addChild(this.labelCombo);
 	    
-	    labelCombo = CCLabelBMFont::create("Combo", "bmfontCB64.fnt");
-	    labelCombo.setPosition(ccp(planetCenterX, planetCenterY + 75));
-	    labelCombo.setColor(ccc3(255, 255, 0));
-	    layerCombo.addChild(labelCombo);
+	    this.labelComboNum = cc.LabelBMFont.create("", s_bmfontCB64_fnt);
+	    this.labelComboNum.setPosition(ccp(GameData.planetCenterX, GameData.planetCenterY));
+	    this.labelComboNum.setColor(cc.c3b(255, 255, 0));
+	    this.layerCombo.addChild(this.labelComboNum);
 	    
-	    labelComboNum = CCLabelBMFont::create("", "bmfontCB64.fnt");
-	    labelComboNum.setPosition(ccp(planetCenterX, planetCenterY));
-	    labelComboNum.setColor(ccc3(255, 255, 0));
-	    layerCombo.addChild(labelComboNum);
+	    this.labelComboMul = cc.LabelBMFont.create("", s_bmfontCB64_fnt);
+	    this.labelComboMul.setPosition(ccp(843, 520));
+	    this.labelComboMul.setVisible(false);
 	    
-	    labelComboMul = CCLabelBMFont::create("", "bmfontCB64.fnt");
-	    labelComboMul.setPosition(ccp(843, 520));
-	    labelComboMul.setVisible(false);
+	    this.layerCombo.addChild(this.labelComboMul);
+	    this.layerCombo.setVisible(false);
 	    
-	    layerCombo.addChild(labelComboMul);
-	    layerCombo.setVisible(false);
+	    this.addChild(this.layerCombo, 8);	    
 	    
-	    this.addChild(layerCombo, 8);	    
+	    this.labelScore = cc.LabelBMFont.create("0", s_bmfontCB64_fnt);
+	    this.labelScore.setPosition(ccp(765, 570));
+	    this.labelScore.setColor(cc.c3b(255, 255, 255));
+	    this.labelScore.setScale(0.7);
+	    this.labelScore.setAnchorPoint(ccp(1.0, 0.5));
+	    this.addChild(this.labelScore, 8);
 	    
-	    labelScore = CCLabelBMFont::create("0", "bmfontCB64.fnt");;
-	    labelScore.setPosition(ccp(765, 570));
-	    labelScore.setColor(ccc3(255, 255, 255));
-	    labelScore.setScale(0.7f);
-	    labelScore.setAnchorPoint(ccp(1.0f, 0.5f));
-	    this.addChild(labelScore, 8);
-	    
-	    labelScoreSpell = CCLabelBMFont::create("Score", "bmfontCB64.fnt");
-	    labelScoreSpell.setPosition(ccp(880, 565));
-	    labelScoreSpell.setColor(ccc3(255, 255, 255));
-	    labelScoreSpell.setScale(0.55f);
-	    labelScoreSpell.setAnchorPoint(ccp(1.0f, 0.5f));
-	    this.addChild(labelScoreSpell, 8);
-	}
+	    this.labelScoreSpell = cc.LabelBMFont.create("Score", s_bmfontCB64_fnt);
+	    this.labelScoreSpell.setPosition(ccp(880, 565));
+	    this.labelScoreSpell.setColor(cc.c3b(255, 255, 255));
+	    this.labelScoreSpell.setScale(0.55);
+	    this.labelScoreSpell.setAnchorPoint(ccp(1.0, 0.5));
+	    this.addChild(this.labelScoreSpell, 8);
+	},
 	
-	void GameScene::initLayerParticle()
+	initLayerParticle:function()
 	{
-	    layerParticle = CCLayer::create();
-	    layerParticle.setAnchorPoint(ccp(0.5, 1.0 / 600 * planetCenterY));
-	    layerParticle.setRotation(playerX);
-	    this.addChild(layerParticle, 5);
-	}
+	    this.layerParticle = cc.Layer.create();
+	    this.layerParticle.setAnchorPoint(ccp(0.5, 1.0 / 600 * GameData.planetCenterY));
+	    this.layerParticle.setRotation(this.playerX);
+	    this.addChild(this.layerParticle, 5);
+	},
 	
-	void GameScene::initLayerFlash()
+	initLayerFlash:function()
 	{
-	    layerColorFlash = CCLayerColor::create();
-	    this.addChild(layerColorFlash, 9);
-	}
+	    this.layerColorFlash = cc.LayerColor.create();
+	    this.addChild(this.layerColorFlash, 9);
+	},
 	
-	void GameScene::initBtnPause()
+	initBtnPause:function()
 	{
-	    menuItemPause = CCMenuItemImage::create("pausebutton.png", "pausebuttonpressed.png", this, menu_selector(GameScene::clickBtnPause));
+	    this.menuItemPause = cc.MenuItemImage.create(s_pausebutton_png, s_pausebuttonpressed_png, this.clickBtnPause, this);
 	    
-	    menuBtnPause = CCMenu::create(menuItemPause, NULL);
+	    this.menuBtnPause = cc.Menu.create(this.menuItemPause, null);
 	    
-	    menuBtnPause.setPosition(ccp(70, 530));
-	    this.addChild(menuBtnPause, 10);
-	}
+	    this.menuBtnPause.setPosition(ccp(70, 530));
+	    this.addChild(this.menuBtnPause, 10);
+	},
 	
-	void GameScene::initMenuItemBtnPause()
+	initMenuItemBtnPause:function()
 	{	    
-	    CCMenuItem* menuItemResume = CCMenuItemImage::create("menu2_1.png", "menu2_1_off.png", this, menu_selector(GameScene::clickBtnResume));
-	    CCMenuItem* menuItemRestart = CCMenuItemImage::create("menu2_2.png", "menu2_2_off.png", this, menu_selector(GameScene::clickBtnRestart));
-	    CCMenuItem* menuItemExit = CCMenuItemImage::create("menu2_3.png", "menu2_3_off.png", this, menu_selector(GameScene::clickBtnExit));
+	    var menuItemResume = cc.MenuItemImage.create(s_menu2_1_png, s_menu2_1_off_png, this.clickBtnResume, this);
+	    var menuItemRestart = cc.MenuItemImage.create(s_menu2_2_png, s_menu2_2_off_png, this.clickBtnRestart, this);
+	    var menuItemExit = cc.MenuItemImage.create(s_menu2_3_png, s_menu2_3_off_png, this.clickBtnExit, this);
 	    
-	    menuItemResume.setScale(0.7f);
-	    menuItemExit.setScale(0.7f);
-	    menuItemRestart.setScale(0.7f);
-	    CCMenuItem* menuItemSetting = CCMenuItemImage::create("setting.png", "setting_pressed.png", this, menu_selector(GameScene::clickBtnOption));
-	    menuItemSetting.setScale(0.8f);
-	    menuBtnSetting = CCMenu::create(menuItemSetting, NULL);
-	    menuBtnSetting.setPosition(ccp(/*820, 520*/830, 530));
+	    menuItemResume.setScale(0.7);
+	    menuItemExit.setScale(0.7);
+	    menuItemRestart.setScale(0.7);
+	    var menuItemSetting = cc.MenuItemImage.create(s_setting_png, s_setting_pressed_png, this.clickBtnOption, this);
+	    menuItemSetting.setScale(0.8);
+	    this.menuBtnSetting = cc.Menu.create(menuItemSetting, null);
+	    this.menuBtnSetting.setPosition(ccp(830, 530));
 	    	    
-	    menuStatePause = CCMenu::create(menuItemResume, menuItemRestart, menuItemExit, NULL);
-	    menuStatePause.alignItemsVerticallyWithPadding(7);
-	    menuStatePause.setPosition(ccp(0, 0));
-	    menuStatePause.setPosition(ccp(450, 155));
+	    this.menuStatePause = cc.Menu.create(menuItemResume, menuItemRestart, menuItemExit, null);
+	    this.menuStatePause.alignItemsVerticallyWithPadding(7);
+	    this.menuStatePause.setPosition(ccp(0, 0));
+	    this.menuStatePause.setPosition(ccp(450, 155));
 	    
-	    sprPauseLabel = CCSprite::create("pause.png");
-	    sprPauseLabel.setPosition(ccp(450, 400));
-	    sprPauseLabel.setScale(0.9f);
+	    this.sprPauseLabel = cc.Sprite.create(s_pause_png);
+	    this.sprPauseLabel.setPosition(ccp(450, 400));
+	    this.sprPauseLabel.setScale(0.9);
 	    
-	    layerPauseMenu = CCLayerColor::create(ccc4(0, 0, 0, 100));
-	    layerPauseMenu.addChild(sprPauseLabel);
-	    layerPauseMenu.addChild(menuStatePause);
-	    layerPauseMenu.addChild(menuBtnSetting);
+	    this.layerPauseMenu = cc.LayerColor.create(cc.c3b(0, 0, 0));
+	    this.layerPauseMenu.setOpacity(100);
+	    this.layerPauseMenu.addChild(this.sprPauseLabel);
+	    this.layerPauseMenu.addChild(this.menuStatePause);
+	    this.layerPauseMenu.addChild(this.menuBtnSetting);
 	    
-	    layerPauseMenu.setVisible(false);
-	    this.addChild(layerPauseMenu, 10);
-	}
+	    this.layerPauseMenu.setVisible(false);
+	    this.addChild(this.layerPauseMenu, 10);
+	},
 	
-	void GameScene::initSpriteShield()
+	initSpriteShield:function()
 	{
-	    remainShieldCoolTimeMax = 360;
-	    
-	    sprShield = CCSprite::create("shieldcircle.png");
-	    sprShield.setPosition(ccp(shieldX, shieldY));
-	    sprShield.setOpacity(195);
-	    sprShield.setScale(0);
-	    this.addChild(sprShield, 5);
-	    sprShield.setVisible(false);
-	}
+	    this.remainShieldCoolTimeMax = 360;	    
+	    this.sprShield = cc.Sprite.create(s_shieldcircle_png);
+	    this.sprShield.setPosition(ccp(GameData.shieldX, GameData.shieldY));
+	    this.sprShield.setOpacity(195);
+	    this.sprShield.setScale(0);
+	    this.addChild(this.sprShield, 5);
+	    this.sprShield.setVisible(false);
+	},
 	
     initOptionBox:function()
     {
@@ -418,39 +417,38 @@ var GameLayer = cc.Layer.extend
 	    this.addChild(this.menuBtnSetting);
     },
 
-	void GameScene::initGameover()
+	initGameover:function()
 	{
-	    layerGameover = CCLayer::create();
+	    layerGameover = cc.Layer.create();
 	    
-	    CCSprite* sprGameover = CCSprite::create("gameover.png");
+	    var sprGameover = cc.Sprite.create(s_gameover_png);
 	    sprGameover.setPosition(ccp(450, 355));
-	    sprGameover.setScale(1.2f);
-	    layerGameover.addChild(sprGameover);
-	    layerGameover.setVisible(false);
+	    sprGameover.setScale(1.2);
+	    this.layerGameover.addChild(this.sprGameover);
+	    this.layerGameover.setVisible(false);
 	    
-	    this.addChild(layerGameover, 9);
-	}
+	    this.addChild(this.layerGameover, 9);
+	},
 	
-	void GameScene::initEtc()
+	initEtc:function()
 	{
-	    deltaComboNum = 1;
-	    realMeteorScore = 0;
-	    preLevelUpNeed = 1;
-	    preLevelScore = 0;
-	    isHighestScore = false;
-	    touchCount = 0;
-	    remainGameOverCoolTime = 60;
-	    time = 0;
+	    this.deltaComboNum = 1;
+	    this.realMeteorScore = 0;
+	    this.preLevelUpNeed = 1;
+	    this.preLevelScore = 0;
+	    this.isHighestScore = false;
+	    this.touchCount = 0;
+	    this.remainGameOverCoolTime = 60;
+	    this.time = 0;
 	    
-	    currentCombo = 0;
+	    this.currentCombo = 0;
 	    
-	    sprHighestScore = CCSprite::create(GameData::isHardCore ? "highscore_hard.png" : "highscore.png");
-	    sprHighestScore.setPosition(ccp(450, 170));
-	    sprHighestScore.setScale(0.45f);
-	    sprHighestScore.setVisible(false);
-	    this.addChild(sprHighestScore, 9);
+	    this.sprHighestScore = cc.Sprite.create(GameData.isHardCore ? s_highscore_hard_png : s_highscore_png);
+	    this.sprHighestScore.setPosition(ccp(450, 170));
+	    this.sprHighestScore.setScale(0.45);
+	    this.sprHighestScore.setVisible(false);
+	    this.addChild(this.sprHighestScore, 9);
 	}
-   
 });
 
 var GameScene = cc.Scene.extend
