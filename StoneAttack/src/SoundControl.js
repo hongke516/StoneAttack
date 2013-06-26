@@ -30,8 +30,8 @@
 				useHighPerformance: true,
 				onready: function() {
 					for(var i = 0; i < SoundControl.SoundList.length; i++) {
-						SoundControl.Sound[sound[i]] = soundManager.createSound({
-							url: sound[i],
+						SoundControl.Sound[SoundControl.SoundList[i]] = soundManager.createSound({
+							url: SoundControl.SoundList[i],
 							autoLoad: true
 						});
 					}
