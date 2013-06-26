@@ -30,7 +30,7 @@ var ParticleExplosionSprite = cc.Sprite.extend({
 	},
 
 	updatePoint: function() {
-		if(gameData.gameState == gameData.STATE_PAUSE) return;
+		if(GameData.gameState == GameData.STATE_PAUSE) return;
 		
 		this.opacityTime -= this.deltaOpacity;
 		if(this.opacityTime <= 0) {

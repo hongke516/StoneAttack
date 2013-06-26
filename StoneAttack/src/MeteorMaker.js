@@ -21,7 +21,7 @@ var MeteorMaker = cc.Class.extend({
 	},
 
 	newInstance: function(currentX) {
-		gameData.gameScene.makeMeteor(currentX);
+		GameData.gameScene.makeMeteor(currentX);
 	},
 
 	create: function(x) {

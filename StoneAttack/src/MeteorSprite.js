@@ -1,4 +1,4 @@
-var MeteoSprite = cc.Sprite.extend({
+var MeteorSprite = cc.Sprite.extend({
 	_currentAngle: 0,
 
 	// static
@@ -10,17 +10,17 @@ var MeteoSprite = cc.Sprite.extend({
 	isHp: false,
 
 	dropSpeed: 0,
-	meteoX: Math.floor(Math.random() * 1000 % 360), meteoY: 680,
+	MeteorX: Math.floor(Math.random() * 1000 % 360), MeteorY: 680,
 
 	construct: function(x) {
 		this.dropSpeed = Math.floor(Math.random() * 1000) % (this.maxDropSpeed - this.minDropSpeed) + this.minDropSpeed;
 		if(x) {
-			this.meteoX = x;
+			this.MeteorX = x;
 		}
 	},
 
 	create: function() {
-		var pobSprite = new MeteoSprite();
+		var pobSprite = new MeteorSprite();
 		pobSprite.construct();
 		var randNum = Math.floor(Math.random() * 10 % 4);
 		if(pobSprite && pobSprite.initWithFile(randNum == 0 ? s_metheo1_png : randNum == 1 ? s_metheo2_png : randNum == 3 ? s_metheo3_png : s_metheo4_png)) {
@@ -32,7 +32,7 @@ var MeteoSprite = cc.Sprite.extend({
 	},
 
 	createShield: function(x) {
-		var pobSprite = new MeteoSprite();
+		var pobSprite = new MeteorSprite();
 		pobSprite.construct(x);
 		if(pobSprite && pobSprite.initWithFile(s_shield_png)) {
 			pobSprite.isShield = true;
@@ -45,7 +45,7 @@ var MeteoSprite = cc.Sprite.extend({
 	},
 
 	createHp: function() {
-		var pobSprite = new MeteoSprite();
+		var pobSprite = new MeteorSprite();
 		pobSprite.construct();
 		if(pobSprite && pobSprite.initWithFile(s_life_png)) {
 			pobSprite.isHp = true;
@@ -65,26 +65,26 @@ var MeteoSprite = cc.Sprite.extend({
 
 		this.setRotation(this.currentAngle);
 
-		this.meteoY += this.dropSpeed;
-		var dx = this.meteoX - gameData.playerX,
-			x  = gameData.planetCenterX + Math.cos(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.meteoY,
-			y  = gameData.planetCenterY + Math.sin(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.meteoY;
+		this.MeteorY += this.dropSpeed;
+		var dx = this.MeteorX - GameData.playerX,
+			x  = GameData.planetCenterX + Math.cos(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.MeteorY,
+			y  = GameData.planetCenterY + Math.sin(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.MeteorY;
 
 		this.setPosition(cc.p(x, y));
-		if(this.meteoY < 163) {
-			gameData.gameScene.collidePlanet(this);
-		} else if(gameData.gameScene.isShield && Math.pow(gameData.shieldX - x, 2) + Math.pow(gameData.shieldY - y, 2) < 1600) {
+		if(this.MeteorY < 163) {
+			GameData.gameScene.collidePlanet(this);
+		} else if(GameData.gameScene.isShield && Math.pow(GameData.shieldX - x, 2) + Math.pow(GameData.shieldY - y, 2) < 1600) {
 			if(!(this.isShield || this.isHp)) {
-				gameData.gameScene.collideShield(this);
+				GameData.gameScene.collideShield(this);
 			} else {
-				gameData.gameScene.collideItem(this);
+				GameData.gameScene.collideItem(this);
 			}
-		} else if(x > gameData.playerRectX1 && x < gameData.playerRectX2 &&
-				  y > gameData.playerRectY1 && y < gameData.playerRectY2) {
+		} else if(x > GameData.playerRectX1 && x < GameData.playerRectX2 &&
+				  y > GameData.playerRectY1 && y < GameData.playerRectY2) {
 			if(!(this.isShield || this.isHp)) {
-				gameData.gameScene.collidePlayer(this);
+				GameData.gameScene.collidePlayer(this);
 			} else {
-				gameData.gameScene.collideItem(this);
+				GameData.gameScene.collideItem(this);
 			}
 		}
 	}
