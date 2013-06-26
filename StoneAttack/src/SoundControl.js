@@ -78,7 +78,7 @@
 				return;
 			}
 
-			this.Sound[soundName].pause();
+			this.Sound[soundName].stop();
 		}
 	};
 
