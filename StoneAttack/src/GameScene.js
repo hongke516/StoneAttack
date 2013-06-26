@@ -71,7 +71,6 @@ var GameLayer = cc.Layer.extend
 	    	    
 	    this.initEtc();
 	    this.initPlayerState();
-	    //    this.initLayerRotate();
 	    this.initSpriteBackground();
 	    this.initBtnPause();
 	    this.initMenuItemBtnPause();
@@ -86,7 +85,7 @@ var GameLayer = cc.Layer.extend
 	    this.initOptionBox();
 	    this.initGameover();
 
-//	    this.schedule(this.update);
+	    this.schedule(this.update);
 	    
 	    if(GameData.isHardCore)
 	    {
@@ -101,7 +100,7 @@ var GameLayer = cc.Layer.extend
 	        MeteorSprite.maxDropSpeed = 4;
 	    }
 	    
-//	    this.startGame();		
+	    this.startGame();		
 		
 		this.setKeyboardEnabled(true);
         this.setTouchEnabled(true);
@@ -123,7 +122,7 @@ var GameLayer = cc.Layer.extend
 	    this.preLevelUpNeed = 1;
 	    this.runReverse = false;
 	    this.runMode = 0;
-	    this.currentHP = HP_MAX;
+	    this.currentHP = GameData.HP_MAX;
 	    this.currentScore = 0;
 	    
 	    this.currentRunAnimation = 0;
@@ -168,7 +167,7 @@ var GameLayer = cc.Layer.extend
 	            GameData.HighScore.Normal = GameData.currentScore;
 	        }
 	    }
-	    saveFile();
+	    this.saveFile();
 	},
 	
 	makeShieldParticle:function(meteor)
@@ -179,7 +178,7 @@ var GameLayer = cc.Layer.extend
 	    tempParticle.start();
 	},
 	
-	makeRotationParticle(position)
+	makeRotationParticle:function(position)
 	{
 	    var tempParticle = ParticleExplosionSprite.createWithPoint(s_star_particle_png, position);
 	    this.layerParticle.addChild(tempParticle);
@@ -194,8 +193,27 @@ var GameLayer = cc.Layer.extend
 	}
 	*/
 	makeMeteor:function(x)
-	{
-	    var buf = MeteorSprite.create(x);
+	{////
+//	    var buf = MeteorSprite.protytype.create(x);
+		var buf = new MeteorSprite();
+		buf.construct(x);
+		var randNum = Math.floor(Math.random() * 4);
+		switch(randNum)
+		{
+			case 0:
+				buf.initWithFile(s_metheo1_png);
+				break;
+			case 1:
+				buf.initWithFile(s_metheo2_png);
+				break;
+			case 2:
+				buf.initWithFile(s_metheo3_png);
+				break;
+			case 3:
+				buf.initWithFile(s_metheo4_png);
+				break;
+		}
+		
 	    this.addChild(buf, 6);
 	    this.arrayMeteorites.push(buf);
 	},
@@ -209,7 +227,7 @@ var GameLayer = cc.Layer.extend
 	
 	makeMeteorItemShield:function()
 	{
-	    var randNum = Math.floor(Math.random() * 180) + GameData.GameData.playerX;
+	    var randNum = Math.floor(Math.random() * 180) + GameData.playerX;
 	    
 	    var rangeX = this.randNum >= 360 ? this.randNum - 360 : this.randNum;
 	    var buf = MeteorSprite.createShield(rangeX);
@@ -219,9 +237,11 @@ var GameLayer = cc.Layer.extend
 	
 	makeMeteorMaker:function()
 	{
-	    var buf = MeteorMaker.create();
+	    // var buf = MeteorMaker.create();
+		var buf = new MeteorMaker();
+//		buf.construct(Math.floor(Math.random() * 360));	    
 	    this.arrayMeteorMaker.push(buf);
-	}
+	},
 
 	collidePlanet:function(meteor)
 	{
@@ -357,7 +377,7 @@ var GameLayer = cc.Layer.extend
 	    this.removeChild(meteor, true);	    
 	    this.arrayMeteorites.removeObject(arrayMeteorites.indexOf(meteor), 1);
 //	    this.removeChild(meteor, true);
-	    this.startSoundEffect(s_itemgot_wav);
+	    this.startSoundEffect(s_itemgot_mp3);
 	},
 
 	collideShield:function(meteor)
@@ -393,10 +413,10 @@ var GameLayer = cc.Layer.extend
 	enterHome:function()
 	{
 	    this.layerGameover.setVisible(false);
-	    this.prHighestScore.setVisible(false);
+	    this.sprHighestScore.setVisible(false);
 	    this.labelScore.setVisible(false);
 	    this.layerCombo.setVisible(false);
-	    this.abelScoreSpell.setVisible(false);
+	    this.labelScoreSpell.setVisible(false);
 	    this.removeMakerAndMeteorites();
 	    this.schedule(this.updateEnterHome);
 	},
@@ -412,7 +432,7 @@ var GameLayer = cc.Layer.extend
         this.arrayMeteorMaker = [];
         
 	    var count = this.arrayMeteorites.length;
-	    for(i = count-1; i >= 0; i--)
+	    for(var i = count-1; i >= 0; i--)
 	    {
 	        var buf = arrayMeteorites[i];
 	        this.removeChild(buf, true);
@@ -425,7 +445,7 @@ var GameLayer = cc.Layer.extend
 	{
 	    if(GameData.isHardCore)
 	    {
-	        GameData.GameData.playerX = (GameData.GameData.playerX <= 275 && GameData.GameData.playerX >= 265) ? 270 : (GameData.playerX > 90 && GameData.playerX < 265) ? GameData.playerX + 5 : GameData.playerX - 5;
+	        GameData.playerX = (GameData.playerX <= 275 && GameData.playerX >= 265) ? 270 : (GameData.playerX > 90 && GameData.playerX < 265) ? GameData.playerX + 5 : GameData.playerX - 5;
 	        if(GameData.playerX < 0)
 	        {
 	            GameData.playerX += 360;
@@ -464,19 +484,19 @@ var GameLayer = cc.Layer.extend
 	    {
 	        return;
 	    }
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    this.gamePause();
 	},
 	
 	clickBtnResume:function()
 	{
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    this.gameResume();
 	},
 	
 	clickBtnRestart:function()
 	{
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    this.saveHighScore();
 	    this.startGame();
 	    this.gameResume();
@@ -489,13 +509,13 @@ var GameLayer = cc.Layer.extend
 	
 	clickBtnOption:function()
 	{
-	    this.startSoundEffect(s_pong_wav);
-	    
+	    this.startSoundEffect(s_pong_mp3);
+	
 	    this.layerOptionBox.setVisible(true);
 	    this.menuStatePause.setVisible(false);
 	    this.sprPauseLabel.setVisible(false);
 	    this.menuBtnSetting.setVisible(false);
-	}
+	},
 	
 	clickBtnExit:function()
 	{
@@ -508,12 +528,12 @@ var GameLayer = cc.Layer.extend
 	    this.enterHome();
 	    this.remainHitCoolTime = 0;
 	    this.sprCharacter.setVisible(true);
-	}
+	},
 	
 	clickOptionMusic:function()
 	{
 	    GameData.isMusicSound = !GameData.isMusicSound;
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    this.saveFile();
 	    
 	    if(GameData.isMusicSound)
@@ -528,25 +548,25 @@ var GameLayer = cc.Layer.extend
 	        // instance.stopBackgroundMusic();
 	    }
 	    this.bgmSettingChanged = true;
-	}
+	},
 	
 	clickOptionSE:function()
 	{
 		GameData.isSoundEffect = !GameData.isSoundEffect;
-	 	this.startSoundEffect(s_pong_wav);
+	 	this.startSoundEffect(s_pong_mp3);
 	 	this.saveFile();
-	}
+	},
 	/*
 	void GameScene.clickOptionVibrate()
 	{
-	    startSoundEffect("pong.wav");
+	    startSoundEffect("pong.mp3");
 	    GameData.isVibrate = !GameData.isVibrate;
 	    saveFile();
 	}
 	*/
-	void GameScene.clickOptionExit()
+	clickOptionExit:function()
 	{
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    
 	    this.menuStatePause.setVisible(true);
 	    this.sprPauseLabel.setVisible(true);
@@ -561,7 +581,7 @@ var GameLayer = cc.Layer.extend
 	        // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
 	        // instance.stopBackgroundMusic();
 	    }
-	}
+	},
 	
 	clickOptionBgmLeft:function()
 	{
@@ -661,7 +681,7 @@ var GameLayer = cc.Layer.extend
 	    this.saveFile();		
 	},
 	
-	ChangeSpeedDifficulty:funtion()
+	ChangeSpeedDifficulty:function()
 	{
 	    if (this.realMeteorScore - this.preLevelScore >= this.preLevelUpNeed)
 	    {
@@ -724,7 +744,7 @@ var GameLayer = cc.Layer.extend
 	             break;
 	             */
 	    }
-	}
+	},
 	
 	update:function()
 	{
@@ -743,14 +763,14 @@ var GameLayer = cc.Layer.extend
 	    
 	    for(var i=0; i<this.arrayMeteorMaker.length; i++)
 	    {
-	    	arrayMeteorMaker[i].update();
+	    	this.arrayMeteorMaker[i].update();
 	    }	
 	        	    
 	    for(var i=0; i<this.arrayMeteorites.length; i++)
 	    {
-	    	arrayMeteorites[i].update();
+	    	this.arrayMeteorites[i].update();
 	    }	    	    
-	}
+	},
 	
 	updateShield:function()
 	{
@@ -885,152 +905,188 @@ var GameLayer = cc.Layer.extend
 	
 	updateGameOverCoolTime:function()
 	{
-	    remainGameOverCoolTime--;
-	    if(remainGameOverCoolTime == 0)
+	    this.remainGameOverCoolTime--;
+	    if(this.remainGameOverCoolTime == 0)
 	    {
-	        this.unschedule(schedule_selector(GameScene.updateGameOverCoolTime));
+	        this.unschedule(this.updateGameOverCoolTime);
 	    }
 	},
 		
 	startShield:function()
 	{
-	    isShield = true;
-	    remainShieldCoolTime = remainShieldCoolTimeMax;
-	    //    remainShieldHpMax = arrayMeteorMaker.count() * 1800;
-	    //    remainShieldHp = remainShieldHpMax;
+	    this.isShield = true;
+	    this.remainShieldCoolTime = GameData.remainShieldCoolTimeMax;
 	    
-	    sprShield.setVisible(true);
-	    sprShield.setOpacity(195);
-	    sprShield.setTexture(CCTextureCache.sharedTextureCache().addImage("shieldcircle.png"));
+	    this.sprShield.setVisible(true);
+	    this.sprShield.setOpacity(195);
+	    this.sprShield.setTexture(cc.TextureCache.getInstance().addImage(s_shieldcircle_png));
 	    
-	    CCScaleTo* scaleAction = CCScaleTo.create(0.1f,  1.0f);
-	    sprShield.runAction(CCSequence.create(scaleAction, NULL));
+	    var scaleAction = cc.ScaleTo.create(0.1,  1.0);
+	    sprShield.runAction(cc.Sequence.create(scaleAction, null));
 	    
-	    this.schedule(schedule_selector(GameScene.updateShield));
+	    this.schedule(this.updateShield);
 	},
 	
 	stopShield:function()
 	{
-	    isShield = false;
-	    remainShieldCoolTime = 0;
-	    sprShield.setVisible(false);
-	    sprShield.setScale(0);
-	    this.unschedule(schedule_selector(GameScene.updateShield));
-	    CCLOG("stopShield");
+	    this.isShield = false;
+	    this.remainShieldCoolTime = 0;
+	    this.sprShield.setVisible(false);
+	    this.sprShield.setScale(0);
+	    this.unschedule(this.updateShield);
 	},
 		
 	startComboEffect:function()
 	{
-	    if(currentCombo % 10 == 0 || currentCombo == 2)
+	    if(this.currentCombo % 10 == 0 || this.currentCombo == 2)
 	    {
-	        //        bool combo100 = currentCombo % 100 == 0 ? true : false;
-	        /*
-	         CCScaleTo* scaleAction = CCScaleTo.create(0.02f, currentCombo % 100 == 0 ? 1.3f : 1.0f);
-	         CCScaleTo* scaleActionReverse = CCScaleTo.create(0.05f, 0.8f);
-	         CCScaleTo* scaleAction2 = CCScaleTo.create(0.02f, currentCombo % 100 == 0 ? 1.3f : 1.0f);
-	         CCScaleTo* scaleActionReverse2 = CCScaleTo.create(0.05f, 0.8f);
-	         CCScaleTo* scaleAction3 = CCScaleTo.create(0.02f, currentCombo % 100 == 0 ? 1.5 : 1.25f);
-	         CCScaleTo* scaleActionReverse3 = CCScaleTo.create(0.05f, 1.0f);
-	         */
-	        bool temp = currentCombo % 100 == 0;
+	        var temp = this.currentCombo % 100 == 0;
 	        
-	        CCScaleTo* scaleAction = CCScaleTo.create(temp ? 0.03f : 0.02f, temp ? 1.4f : 1.15f);
-	        CCScaleTo* scaleActionReverse = CCScaleTo.create(0.05f, 1.0f);
-	        CCScaleTo* scaleAction2 = CCScaleTo.create(temp ? 0.03f : 0.02f, temp ? 1.4f : 1.15f);
-	        CCScaleTo* scaleActionReverse2 = CCScaleTo.create(0.05f, 1.0f);
-	        temp = currentCombo == 200 || currentCombo == 400 || currentCombo == 700 || currentCombo == 1000;
-	        CCScaleTo* scaleAction3 = CCScaleTo.create(temp ? 0.05f : 0.02f, temp ? 2.0f : 1.15f);
-	        CCScaleTo* scaleActionReverse3 = CCScaleTo.create(0.05f, 1.0f);
-	        //    CCAction* actions = CCSpawn.create(scaleActionReverse, scaleAction, NULL);
-	        //    labelCombo.runAction(actions);
-	        //    labelComboNum.runAction(actions);
-	        labelComboNum.runAction(CCSequence.create(scaleAction, scaleActionReverse, NULL));
-	        labelCombo.runAction(CCSequence.create(scaleAction2, scaleActionReverse2, NULL));
-	        labelComboMul.runAction(CCSequence.create(scaleAction3, scaleActionReverse3, NULL));
+	        var scaleAction = cc.ScaleTo.create(temp ? 0.03 : 0.02, temp ? 1.4 : 1.15);
+	        var scaleActionReverse = cc.ScaleTo.create(0.05, 1.0);
+	        var scaleAction2 = cc.ScaleTo.create(temp ? 0.03 : 0.02, temp ? 1.4 : 1.15);
+	        var scaleActionReverse2 = cc.ScaleTo.create(0.05, 1.0);
+	        temp = this.currentCombo == 200 || this.currentCombo == 400 || this.currentCombo == 700 || this.currentCombo == 1000;
+	        var scaleAction3 = cc.ScaleTo.create(temp ? 0.05 : 0.02, temp ? 2.0 : 1.15);
+	        var scaleActionReverse3 = cc.ScaleTo.create(0.05, 1.0);
+
+	        this.labelComboNum.runAction(cc.Sequence.create(scaleAction, scaleActionReverse, null));
+	        this.labelCombo.runAction(cc.Sequence.create(scaleAction2, scaleActionReverse2, null));
+	        this.labelComboMul.runAction(cc.Sequence.create(scaleAction3, scaleActionReverse3, null));
 	    }
-	}
+	},
 	
-	void GameScene.startFlash(int r, int g, int b, int a)
+	startFlash:function(r, g, b, a)
 	{
-	    layerColorFlash.setColor(ccc3(r, g, b));
-	    layerColorFlash.setOpacity(a);
-	    layerColorFlash.setVisible(true);
-	    this.schedule(schedule_selector(GameScene.updateFlash));
-	}
-	/*
-	 void GameScene.startRunReverse(int coolTime)
-	 {
-	 remainRunReverseCoolTime = coolTime;
-	 }
-	 */
-	void GameScene.startBackgroundMusic()
+	    this.layerColorFlash.setColor(cc.c3b(r, g, b));
+	    this.layerColorFlash.setOpacity(a);
+	    this.layerColorFlash.setVisible(true);
+	    this.schedule(this.updateFlash);
+	},
+
+	startBackgroundMusic:function()
 	{
-	    CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
-	    instance.stopBackgroundMusic();
+	    // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
+	    // instance.stopBackgroundMusic();
+	    ////
+	    if(!GameData.isMusicSound)
+	    {
+	    	return;
+	    }
+	    	    
+		this.stopAllBackgroundMusic(); 
 	    
-	    
-	    int bgmNumber = GameData.currentBgmNumber;
+	    var bgmNumber = GameData.currentBgmNumber;
 	    if(bgmNumber == 0)
 	    {
-	        bgmNumber = rand() % GameData.openedBgmNumber + 1;
+	        bgmNumber = Math.floor(Math.random() * 7) + 1;
 	    }
 	    
-	    if(GameData.isMusicSound)
-	    {
-	        switch(bgmNumber)
-	        {
-	                /*
-	                 case 1:
-	                 instance.playBackgroundMusic(GameData.isHardCore ? "BGM1-fast.mp3" : "BGM1-normal.mp3", true);
-	                 break;
-	                 case 2:
-	                 instance.playBackgroundMusic(GameData.isHardCore ? "BGM2-fast.mp3" : "BGM2-normal.mp3", true);
-	                 break;
-	                 case 3:
-	                 instance.playBackgroundMusic(GameData.isHardCore ? "BGM3-fast.mp3" : "BGM3-normal.mp3", true);
-	                 break;
-	                 case 4:
-	                 instance.playBackgroundMusic(GameData.isHardCore ? "BGM4-fast.mp3" : "BGM4-fast.mp3", true);
-	                 break;
-	                 */
-	            case 1:
-	                instance.playBackgroundMusic("BGM1-normal.mp3", true);
-	                break;
-	            case 2:
-	                instance.playBackgroundMusic("BGM2-normal.mp3", true);
-	                break;
-	            case 3:
-	                instance.playBackgroundMusic("BGM3-normal.mp3", true);
-	                break;
-	            case 4:
-	                instance.playBackgroundMusic("BGM4-fast.mp3", true);
-	                break;
-	            case 5:
-	                instance.playBackgroundMusic("BGM1-fast.mp3", true);
-	                break;
-	            case 6:
-	                instance.playBackgroundMusic("BGM2-fast.mp3", true);
-	                break;
-	            case 7:
-	                instance.playBackgroundMusic("BGM3-fast.mp3", true);
-	                break;
-	        }
-	    }
-	    
-	    //    instance.playEffect("background_music_main.mp3", true);
-	}
+        switch(bgmNumber)
+        {
+            case 1:
+  				SoundControl.Sound[s_BGM1_normal_mp3].play();          
+                // instance.playBackgroundMusic("BGM1-normal.mp3", true);
+                break;
+            case 2:
+            	SoundControl.Sound[s_BGM2_normal_mp3].play();
+                // instance.playBackgroundMusic("BGM2-normal.mp3", true);
+                break;
+            case 3:
+            	SoundControl.Sound[s_BGM3_normal_mp3].play();
+                // instance.playBackgroundMusic("BGM3-normal.mp3", true);
+                break;
+            case 4:
+	            SoundControl.Sound[s_BGM4_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM4-fast.mp3", true);
+                break;
+            case 5:
+            	SoundControl.Sound[s_BGM1_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM1-fast.mp3", true);
+                break;
+            case 6:
+            	SoundControl.Sound[s_BGM2_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM2-fast.mp3", true);
+                break;
+            case 7:
+            	SoundControl.Sound[s_BGM3_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM3-fast.mp3", true);
+                break;
+        }
+	},
 	
-	void GameScene.startSoundEffect(std.string fileName)
+	stopAllBackgroundMusic:function()
 	{
-	    if(/*GameData.isEffectSound*/GameData.isMusicSound)
-	    {
-	        (CocosDenshion.SimpleAudioEngine.sharedEngine()).playEffect(fileName.c_str());
-	    }
-	}
+    	SoundControl.Sound[s_BGM1_normal_mp3].stop();
+    	SoundControl.Sound[s_BGM1_fast_mp3].stop();
+    	SoundControl.Sound[s_BGM2_normal_mp3].stop();
+    	SoundControl.Sound[s_BGM2_fast_mp3].stop();
+    	SoundControl.Sound[s_BGM3_normal_mp3].stop();
+    	SoundControl.Sound[s_BGM3_fast_mp3].stop();
+    	SoundControl.Sound[s_BGM4_fast_mp3].stop();	   		
+	},
+
+	pauseAllBackgroundMusic:function()
+	{
+    	SoundControl.Sound[s_BGM1_normal_mp3].pause();
+    	SoundControl.Sound[s_BGM1_fast_mp3].pause();
+    	SoundControl.Sound[s_BGM2_normal_mp3].pause();
+    	SoundControl.Sound[s_BGM2_fast_mp3].pause();
+    	SoundControl.Sound[s_BGM3_normal_mp3].pause();
+    	SoundControl.Sound[s_BGM3_fast_mp3].pause();
+    	SoundControl.Sound[s_BGM4_fast_mp3].pause();	   		
+	},
 	
-	void GameScene.gamePause()
+	resumeBackgroundMusic:function()
 	{
-	    if(!gameScene)
+		if(!GameData.isMusicSound)
+		{
+			return;
+		}
+		switch(GameData.currentBgmNumber)
+		{
+			case 1:
+				SoundControl.Sound[s_BGM1_normal_mp3].play();
+				break;
+			case 2:
+				SoundControl.Sound[s_BGM2_normal_mp3].play();
+				break;
+			case 3:
+				SoundControl.Sound[s_BGM3_normal_mp3].play();
+				break;
+			case 4:
+				SoundControl.Sound[s_BGM4_fast_mp3].play();
+				break;
+			case 5:
+				SoundControl.Sound[s_BGM1_fast_mp3].play();
+				break;
+			case 6:
+				SoundControl.Sound[s_BGM2_fast_mp3].play();
+				break;
+			case 7:
+				SoundControl.Sound[s_BGM3_fast_mp3].play();
+				break;
+		}
+	},
+	
+	startSoundEffect:function(fileName)
+	{
+    	if(GameData.isSoundEffect)
+    	{
+    		SoundControl.Sound[fileName].play();
+    	}
+   },
+   
+	stopAllSoundEffect:function()
+	{
+    	SoundControl.Sound[s_pong_mp3].stop();
+    	SoundControl.Sound[s_itemgot_mp3].stop();
+    	SoundControl.Sound[s_puck_mp3].stop();
+	},   
+	
+	gamePause:function()
+	{
+	    if(!GameData.gameScene)
 	    {
 	        return;
 	    }
@@ -1040,95 +1096,100 @@ var GameLayer = cc.Layer.extend
 	     child.pauseSchedulerAndActions();
 	     }
 	     */
-	    CCDirector.sharedDirector().pause();
-	    CCDirector.sharedDirector().setAnimationInterval(1.0 / 60);
+	    cc.Director.getInstance().pause();
 	    
-	    if((CocosDenshion.SimpleAudioEngine.sharedEngine()).isBackgroundMusicPlaying())
-	    {
-	        (CocosDenshion.SimpleAudioEngine.sharedEngine()).pauseBackgroundMusic();
-	    }
+	    // cc.Director.getInstance().setAnimationInterval(1.0 / 60);
+	    
+	    this.pauseAllBackgroundMusic();
+	    
+	    // if((CocosDenshion.SimpleAudioEngine.sharedEngine()).isBackgroundMusicPlaying())
+	    // {
+	        // (CocosDenshion.SimpleAudioEngine.sharedEngine()).pauseBackgroundMusic();
+	    // }
+	    
 	    
 	    GameData.gameState = GameData.STATE_PAUSE;
 	    
-	    sprLeftController.setVisible(false);
-	    sprRightController.setVisible(false);
-	    menuItemPause.setVisible(false);
-	    layerPauseMenu.setVisible(true);
+	    // this.sprLeftController.setVisible(false);
+	    // this.sprRightController.setVisible(false);
+	    this.menuItemPause.setVisible(false);
+	    this.layerPauseMenu.setVisible(true);
 	    
-	    layerCombo.setVisible(false);
+	    this.layerCombo.setVisible(false);
 	    
-	    menuBtnPause.setEnabled(false);
-	    labelScore.setVisible(false);
-	    labelScoreSpell.setVisible(false);
-	    sprHighestScore.setVisible(false);
+	    this.menuBtnPause.setEnabled(false);
+	    this.labelScore.setVisible(false);
+	    this.labelScoreSpell.setVisible(false);
+	    this.sprHighestScore.setVisible(false);
 	    
-	    sprCharacter.setVisible(true);
-	    sprHpBar.setVisible(false);
-	    sprHpFrame.setVisible(false);
-	    layerColorFlash.setVisible(false);
-	    sprCharacter.setTexture(CCTextureCache.sharedTextureCache().addImage("player_stand.png"));
-	    sprCharacter.setFlipX(false);
-	}
+	    this.sprCharacter.setVisible(true);
+	    this.sprHpBar.setVisible(false);
+	    this.sprHpFrame.setVisible(false);
+	    this.layerColorFlash.setVisible(false);
+	    this.sprCharacter.setTexture(cc.TextureCache.getInstance().addImage(s_player_stand_png));
+	    this.sprCharacter.setFlipX(false);
+	},
 	
-	void GameScene.gameResume()
+	gameResume:function()
 	{
-	    if(!gameScene)
+	    if(!GameData.gameScene)
 	    {
 	        return;
 	    }
 	    
 	    //    CCDirector.sharedDirector().startAnimation();
-	    CCDirector.sharedDirector().resume();
+	    cc.Director.getInstance().resume();
 	    
 	    if(GameData.isMusicSound)
 	    {
-	        if(bgmSettingChanged)
+	        if(this.bgmSettingChanged)
 	        {
-	            startBackgroundMusic();
-	            bgmSettingChanged = false;
+	            this.startBackgroundMusic();
+	            this.bgmSettingChanged = false;
 	        }
 	        else
 	        {
-	            (CocosDenshion.SimpleAudioEngine.sharedEngine()).resumeBackgroundMusic();
+	        	this.resumeBackgroundMusic();
+//	            (CocosDenshion.SimpleAudioEngine.sharedEngine()).resumeBackgroundMusic();
 	        }
 	    }
 	    
-	    sprLeftController.setVisible(true);
-	    sprRightController.setVisible(true);
-	    menuItemPause.setVisible(true);
-	    layerPauseMenu.setVisible(false);
+	    // this.sprLeftController.setVisible(true);
+	    // this.sprRightController.setVisible(true);
+	    this.menuItemPause.setVisible(true);
+	    this.layerPauseMenu.setVisible(false);
 	    
-	    if(currentCombo >= 2)
+	    if(this.currentCombo >= 2)
 	    {
-	        layerCombo.setVisible(true);
+	        this.layerCombo.setVisible(true);
 	    }
 	    
-	    layerColorFlash.setVisible(true);
-	    menuBtnPause.setEnabled(true);
-	    labelScore.setVisible(true);
-	    labelScoreSpell.setVisible(true);
+	    this.layerColorFlash.setVisible(true);
+	    this.menuBtnPause.setEnabled(true);
+	    this.labelScore.setVisible(true);
+	    this.labelScoreSpell.setVisible(true);
 	    /*
 	     if(isHighestScore)
 	     {
 	     sprHighestScore.setVisible(true);
 	     }
 	     */
-	    if(currentHP != HP_MAX)
+	    if(this.currentHP != GameData.HP_MAX)
 	    {
-	        sprHpBar.setVisible(true);
-	        sprHpFrame.setVisible(true);
+	        this.sprHpBar.setVisible(true);
+	        this.sprHpFrame.setVisible(true);
 	    }
 	    GameData.gameState = GameData.STATE_PLAYING;
-	}
+	},
 	
-	void GameScene.screenTouching()
+	screenTouching:function()
 	{
 	    if(GameData.gameState == GameData.STATE_PAUSE)
 	    {
 	        return;
 	    }
 	    
-	    GameData.playerX += /*remainRunReverseCoolTime <= 0 ?*/ runMode/* : -runMode*/;
+	    GameData.playerX += this.runMode;
 	    if(GameData.playerX < 0)
 	    {
 	        GameData.playerX += 360;
@@ -1138,39 +1199,22 @@ var GameLayer = cc.Layer.extend
 	        GameData.playerX -= 360;
 	    }
 	    
-	    sprPlanet.setRotation(GameData.playerX);
+	    this.sprPlanet.setRotation(GameData.playerX);
 	    //    sprBackground.setRotation(GameData.playerX);
-	    layerParticle.setRotation(GameData.playerX);
+	    this.layerParticle.setRotation(GameData.playerX);
 	    //   this.setRotation(GameData.playerX);
-	}
+	},
 	
-	void GameScene.startTouchSchedule()
+	startTouchSchedule:function()
 	{
-	    this.schedule(schedule_selector(GameScene.screenTouching));
-	    /*
-	     switch(runMode)
-	     {
-	     case -1:
-	     sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlRD.png"));
-	     break;
-	     case -2:
-	     sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlRU.png"));
-	     break;
-	     case 1:
-	     sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlLD.png"));
-	     break;
-	     case 2:
-	     sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlLU.png"));
-	     break;
-	     }
-	     */
-	}
+	    this.schedule(this.screenTouching);
+	},
 	
-	void GameScene.stopTouchSchedule()
+	stopTouchSchedule:function()
 	{
-	    this.unschedule(schedule_selector(GameScene.screenTouching));
-	}
-	
+	    this.unschedule(this.screenTouching);
+	},
+	/*
 	void GameScene.registerWithTouchDispatcher()
 	{
 	    CCDirector.sharedDirector().getTouchDispatcher().addTargetedDelegate(this, 0, true);
@@ -1178,15 +1222,13 @@ var GameLayer = cc.Layer.extend
 	
 	bool GameScene.ccTouchBegan(cocos2d.CCTouch *pTouch, cocos2d.CCEvent *pEvent) //Not optional
 	{
-	    //    CCLOG("began start %d", touchCount);
 	    if(GameData.gameState == GameData.STATE_GAMEOVER)
 	    {
 	        if(remainGameOverCoolTime == 0 && layerGameover.isVisible())
 	        {
-	            startSoundEffect("pong.wav");
+	            startSoundEffect("pong.mp3");
 	            enterHome();
 	        }
-	        //        CCLOG("began false %d", touchCount);
 	        return false;
 	    }
 	    
@@ -1196,35 +1238,21 @@ var GameLayer = cc.Layer.extend
 	    CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(pTouch.getLocationInView());
 	    setRunModeWithPoint(touchPoint.x, touchPoint.y);
 	    startTouchSchedule();
-	    /*
-	     if(touchCount == 0)
-	     {
-	     CCTouch *touch = (CCTouch*)(touches.anyObject());
-	     CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(touch.getLocationInView());
-	     setRunModeWithPoint(touchPoint.x);
-	     startTouchSchedule();
-	     }
-	     */
-	    //    touchCount++;
 	    touchCount++;
-	    //    CCLOG("began end %d", touchCount);
 	    return true;
 	}
 	
 	void GameScene.ccTouchMoved(cocos2d.CCTouch *pTouch, cocos2d.CCEvent *pEvent)
 	{
-	    //    CCLOG("moved start %d", touchCount);
 	    if(pTouch == currentTouch)
 	    {
 	        CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(pTouch.getLocationInView());
 	        setRunModeWithPoint(touchPoint.x, touchPoint.y);
 	    }
-	    //    CCLOG("moved end %d", touchCount);
 	}
 	
 	void GameScene.ccTouchEnded(cocos2d.CCTouch *pTouch, cocos2d.CCEvent *pEvent)
 	{
-	    //    CCLOG("ended start %d", touchCount);
 	    touchCount--;
 	    bool isCurrentTouch = false;
 	    
@@ -1250,214 +1278,22 @@ var GameLayer = cc.Layer.extend
 	            setRunModeWithPoint(touchPoint.x, touchPoint.y);
 	        }
 	    }
-	    //    CCLOG("ended end %d", touchCount);
 	}
 	
 	void GameScene.ccTouchCancelled(cocos2d.CCTouch *pTouch, cocos2d.CCEvent *pEvent)
 	{
-	    //    CCLOG("cancel start %d", touchCount);
 	    touchCount--;//-= touches.count();
-	    
-	    //    CCSetIterator it;
-	    //    CCTouch* touch;
-	    /*
-	     int count = touchArray.count();
-	     for(int i = count - 1; i >= 0; i++)
-	     {
-	     touchArray.removeObjectAtIndex(i);
-	     }
-	     */
 	    touchArray.removeObject(pTouch);
 	    
 	    runMode = 0;
 	    sprLeftController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlL.png"));
 	    sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlR.png"));
 	    stopTouchSchedule();
-	    //    CCLOG("cancel end %d", touchCount);
 	}
-	//
-	//// 손가락이 화면에 닿을 때
-	//void GameScene.ccTouchesBegan(CCSet *touches, CCEvent *event)
-	//{
-	//    if(GameData.gameState == GameData.STATE_GAMEOVER)
-	//    {
-	//        if(layerGameover.isVisible())
-	//        {
-	//            startSoundEffect("pong.wav");
-	//            enterHome();
-	//        }
-	//        return;
-	//    }
-	//
-	//    CCSetIterator it;
-	//    CCTouch* touch;
-	//
-	//    for(it=touches.begin(); it!=touches.end(); it++)
-	//    {
-	//        touch = (CCTouch*)(*it);
-	//        touchArray.addObject(touch);
-	//    }
-	//    currentTouch = touch;
-	//    CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(touch.getLocationInView());
-	//    setRunModeWithPoint(touchPoint.x, touchPoint.y);
-	//    startTouchSchedule();
-	//    /*
-	//     if(touchCount == 0)
-	//     {
-	//     CCTouch *touch = (CCTouch*)(touches.anyObject());
-	//     CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(touch.getLocationInView());
-	//     setRunModeWithPoint(touchPoint.x);
-	//     startTouchSchedule();
-	//     }
-	//     */
-	//    //    touchCount++;
-	//    touchCount += touches.count();
-	//}
-	//
-	//// 손가락이 드래그 될 때
-	//void GameScene.ccTouchesMoved(CCSet *touches, CCEvent *event)
-	//{
-	//    CCSetIterator it;
-	//    CCTouch* touch;
-	//
-	//    for(it=touches.begin(); it!=touches.end(); it++)
-	//    {
-	//        touch = (CCTouch*)(*it);
-	//        if(touch == currentTouch)
-	//        {
-	//            CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(touch.getLocationInView());
-	//            setRunModeWithPoint(touchPoint.x, touchPoint.y);
-	//            return;
-	//        }
-	//    }
-	//
-	//    /*
-	//     CCTouch *touch = (CCTouch*)(touches.anyObject());
-	//     CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(touch.getLocationInView());
-	//     if(touches.count() == 1)
-	//     {
-	//     setRunModeWithPoint(touchPoint.x);
-	//     }
-	//     */
-	//
-	//    //    char buf[80];
-	//    //    sprintf(buf, "Moved %d", touches.count());
-	//    //    label.setString(buf);
-	//}
-	//
-	//// 손가락이 화면 밖에 나가거나, 떨 때
-	//void GameScene.ccTouchesEnded(CCSet *touches, CCEvent *event)
-	//{
-	//    CCSetIterator it;
-	//    CCTouch* touch;
-	//    touchCount -= touches.count();
-	//    bool isCurrentTouch = false;
-	//
-	//    if(touchCount == 0)
-	//    {
-	//        runMode = 0;
-	//        sprLeftController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlL.png"));
-	//        sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlR.png"));
-	//        stopTouchSchedule();
-	//        touchArray.removeAllObjects();
-	//    }
-	//    else
-	//    {
-	//        for(it=touches.begin(); it!=touches.end(); it++)
-	//        {
-	//            touch = (CCTouch*)(*it);
-	//            if(touch == currentTouch)
-	//            {
-	//                isCurrentTouch = true;
-	//            }
-	//            touchArray.removeObject(touch);
-	//        }
-	//        if(isCurrentTouch)
-	//        {
-	//            currentTouch = (CCTouch*) touchArray.objectAtIndex(0);
-	//            CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(currentTouch.getLocationInView());
-	//            setRunModeWithPoint(touchPoint.x, touchPoint.y);
-	//        }
-	//    }
-	//    /*
-	//     touchCount -= touches.count();
-	//     if(touchCount == 0)
-	//     {
-	//     stopTouchSchedule();
-	//     }
-	//     */
-	//}
-	//
-	//// 갑자기 핸드폰이 정지될 때
-	//void GameScene.ccTouchesCancelled(cocos2d.CCSet* touches, cocos2d.CCEvent* event)
-	//{
-	//    CCLog("cc cancelled %d", touchCount);
-	//    touchCount = 0;//-= touches.count();
-	//
-	////    CCSetIterator it;
-	////    CCTouch* touch;
-	///*
-	//    int count = touchArray.count();
-	//    for(int i = count - 1; i >= 0; i++)
-	//    {
-	//        touchArray.removeObjectAtIndex(i);
-	//    }
-	// */
-	//    touchArray.removeAllObjects();
-	//
-	//    runMode = 0;
-	//    sprLeftController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlL.png"));
-	//    sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlR.png"));
-	//    stopTouchSchedule();
-	//
-	//    /*
-	//
-	//    for(it=touches.begin(); it!=touches.end(); it++)
-	//    {
-	//        touch = (CCTouch*)(*it);
-	//        touchArray.removeObject(touch);
-	//    }
-	//    if(touchArray.count() != 0)
-	//    {
-	//        currentTouch = (CCTouch*) touchArray.objectAtIndex(0);
-	//        CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(currentTouch.getLocationInView());
-	//        setRunModeWithPoint(touchPoint.x, touchPoint.y);
-	//    }
-	//    else
-	//    {
-	//        runMode = 0;
-	//        sprLeftController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlL.png"));
-	//        sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlR.png"));
-	//        stopTouchSchedule();
-	//    }
-	//     */
-	//}
-	
+	*/
+	/*
 	void GameScene.setRunModeWithPoint(int x, int y)
 	{
-	    //    runMode = x / -100 + (x < 400 ? 4 : 3);
-	    /*
-	     if(x<150)
-	     {
-	     runMode = 2;
-	     }
-	     else if(x<375)
-	     {
-	     runMode = 1;
-	     }
-	     else if(x<425)
-	     {
-	     runMode = 0;
-	     }
-	     else if(x<650)
-	     {
-	     runMode = -1;
-	     }
-	     else
-	     {
-	     runMode = -2;
-	     }
-	     *///87 + 65 142 22
 	    if(x>=-20 && x<=150)
 	    {
 	        if(y>=-20 && y<=150)
@@ -1524,157 +1360,67 @@ var GameLayer = cc.Layer.extend
 	        sprLeftController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlL.png"));
 	        sprRightController.setTexture(CCTextureCache.sharedTextureCache().addImage("controlR.png"));
 	    }
-	    /*
-	     if(remainRunFastCoolTime > 0)
-	     {
-	     runMode *= 2;
-	     }
-	     if(remainRunReverseCoolTime > 0)
-	     {
-	     runMode *= -1;
-	     }
-	     */
-	    /*
-	     if(x<100)
-	     {
-	     runMode = 2;
-	     }
-	     else if(x<450)
-	     {
-	     runMode = 1;
-	     }
-	     else if(x<800)
-	     {
-	     runMode = -1;
-	     }
-	     else
-	     {
-	     runMode = -2;
-	     }
-	     */
-	    /*
-	     if(x<150)
-	     {
-	     runMode = RUN_MODE_RIGHT_FAST;
-	     }
-	     else if(x<400)
-	     {
-	     runMode = RUN_MODE_RIGHT;
-	     }
-	     else if(x<650)
-	     {
-	     runMode = RUN_MODE_LEFT;
-	     }
-	     else
-	     {
-	     runMode = RUN_MODE_LEFT_FAST;
-	     }
-	     */
 	}
+	*/
 	
-	void GameScene.gameOver()
+	gameOver:function()
 	{
 	    GameData.gameState = GameData.STATE_GAMEOVER;
-	    CocosDenshion.SimpleAudioEngine.sharedEngine().stopBackgroundMusic();
+	    // CocosDenshion.SimpleAudioEngine.sharedEngine().stopBackgroundMusic();
+	   	this.stopAllBackgroundMusic();
 	    
-	    runMode = 0;
-	    updateCharAnimation();
-	    menuBtnPause.setVisible(false);
-	    sprLeftController.setVisible(false);
-	    sprRightController.setVisible(false);
-	    sprHpBar.setVisible(false);
-	    sprHpFrame.setVisible(false);
-	    stopTouchSchedule();
+	    this.runMode = 0;
+	    this.updateCharAnimation();
+	    this.menuBtnPause.setVisible(false);
+	    // this.sprLeftController.setVisible(false);
+	    // this.sprRightController.setVisible(false);
+	    this.sprHpBar.setVisible(false);
+	    this.sprHpFrame.setVisible(false);
+	    this.stopTouchSchedule();
 	    //    layerColorFlash.setOpacity(0);
-	    layerColorFlash.setVisible(false);
-	    stopShield();
-	    layerParticle.setVisible(false);
+	    this.layerColorFlash.setVisible(false);
+	    this.stopShield();
+	    this.layerParticle.setVisible(false);
 	    
-	    this.unschedule(schedule_selector(GameScene.updateHitCoolTime));
-	    this.unschedule(schedule_selector(GameScene.updateFlash));
-	    this.unschedule(schedule_selector(GameScene.updateStateBar));
+	    this.unschedule(this.updateHitCoolTime);
+	    this.unschedule(this.updateFlash);
+	    this.unschedule(this.updateStateBar);
 	    
-	    saveHighScore();
+	    this.saveHighScore();
 	    
-	    if(currentHP <= 0)
+	    if(this.currentHP <= 0)
 	    {
-	        /*
-	         if(!isHighestScore)
-	         {
-	         sprHighestScore.setPosition(ccp(750, 160));
-	         char buf[16] = {0};
-	         sprintf(buf, "%d", GameData.isHardCore ? GameData.highestHardcoreScore : GameData.highestNormalScore);
-	         
-	         CCLabelBMFont* labelHighest = CCLabelBMFont.create(buf, "bmfontCB64.fnt");;
-	         labelHighest.setPosition(ccp(750, 100));
-	         labelHighest.setColor(ccc3(255, GameData.isHardCore ? 0 : 255, 0));
-	         labelHighest.setScale(0.8f);
-	         layerGameover.addChild(labelHighest);
-	         sprHighestScore.setVisible(true);
-	         }
-	         */
-	        labelScore.stopAllActions();
-	        //        labelScoreSpell.stopAllActions();
-	        labelScore.setAnchorPoint(ccp(0.5f, 0.5f));
-	        //        labelScoreSpell.setAnchorPoint(ccp(0.5f, 0.5f));
-	        labelScore.setPosition(ccp(planetCenterX, planetCenterY));
-	        labelScore.setScale(1.0);
-	        //        labelScoreSpell.setPosition(ccp(planetCenterX, planetCenterY + 65));
-	        //        labelScoreSpell.setScale(0.8f);
-	        labelScoreSpell.setVisible(false);
+	        this.labelScore.stopAllActions();
+	        this.labelScore.setAnchorPoint(ccp(0.5, 0.5));
+	        this.labelScore.setPosition(ccp(planetCenterX, planetCenterY));
+	        this.labelScore.setScale(1.0);
+	        this.labelScoreSpell.setVisible(false);
 	        
-	        if(isHighestScore)
+	        if(this.isHighestScore)
 	        {
-	            labelScore.setColor(ccc3(255, GameData.isHardCore ? 0 : 255, 0));
+	            this.labelScore.setColor(ccc3(255, GameData.isHardCore ? 0 : 255, 0));
 	        }
 	        else
 	        {
-	            sprHighestScore.setPosition(ccp(750, 160));
-	            char buf[16] = {0};
-	            sprintf(buf, "%d", GameData.isHardCore ? GameData.highestHardcoreScore : GameData.highestNormalScore);
+	            this.sprHighestScore.setPosition(ccp(750, 160));
 	            
-	            CCLabelBMFont* labelHighest = CCLabelBMFont.create(buf, "bmfontCB64.fnt");;
+	            var buf = "" + GameData.isHardCore ? GameData.highestHardcoreScore : GameData.highestNormalScore;
+	            
+	            var labelHighest = cc.LabelBMFont.create(buf, s_bmfontCB64_fnt);
 	            labelHighest.setPosition(ccp(750, 100));
-	            labelHighest.setColor(ccc3(255, GameData.isHardCore ? 0 : 255, 0));
-	            labelHighest.setScale(0.8f);
-	            layerGameover.addChild(labelHighest);
+	            labelHighest.setColor(cc.c3b(255, GameData.isHardCore ? 0 : 255, 0));
+	            labelHighest.setScale(0.8);
+	            this.layerGameover.addChild(labelHighest);
 	        }
-	        sprHighestScore.setVisible(true);
-	        layerGameover.setVisible(true);
+	        this.sprHighestScore.setVisible(true);
+	        this.layerGameover.setVisible(true);
 	    }
-	}
+	},
 
-	void GameScene.saveFile()
+	saveFile:function()
 	{
-	    FileIO.sharedInstance().saveFile();
-	}
-
-    /*
-    onTouchesBegan:function (touches, event)
-    {
-        this.isMouseDown = true;
-    },
-    onTouchesMoved:function (touches, event)
-    {
-        if (this.isMouseDown)
-        {
-            if (touches)
-            {
-                //this.circle.setPosition(cc.p(touches[0].getLocation().x, touches[0].getLocation().y));
-            }
-        }
-    },
-    onTouchesEnded:function (touches, event)
-    {
-        this.isMouseDown = false;
-    },
-    onTouchesCancelled:function (touches, event)
-    {
-        console.log("onTouchesCancelled");
-    }
-    */
-   
-   
+		GameCache.save();
+	},
    
     initSpriteBackground:function()
     {
@@ -1688,7 +1434,7 @@ var GameLayer = cc.Layer.extend
     {
     	this.sprPlanet = cc.Sprite.create(s_planet_png);
     	this.sprPlanet.setPosition(cc.p(450, 100));
-    	this.sprPlanet.setRotation(GameData.GameData.playerX);
+    	this.sprPlanet.setRotation(GameData.playerX);
     	this.addChild(this.sprPlanet, 8);
     },
 	
@@ -1768,13 +1514,15 @@ var GameLayer = cc.Layer.extend
 	{
 	    this.layerParticle = cc.Layer.create();
 	    this.layerParticle.setAnchorPoint(ccp(0.5, 1.0 / 600 * GameData.planetCenterY));
-	    this.layerParticle.setRotation(GameData.GameData.playerX);
+	    this.layerParticle.setRotation(GameData.playerX);
 	    this.addChild(this.layerParticle, 5);
 	},
 	
 	initLayerFlash:function()
 	{
 	    this.layerColorFlash = cc.LayerColor.create();
+	    this.layerColorFlash.setVisible(false);
+	    this.layerColorFlash.setOpacity(0);
 	    this.addChild(this.layerColorFlash, 9);
 	},
 	
@@ -1887,7 +1635,7 @@ var GameLayer = cc.Layer.extend
 	            this.sprBgmNumber = cc.Sprite.create(s_bgm3_normal_png);
 	            break;
 	        case 4:
-	            this.sprBgmNumber = cc.Sprite.create(s_bgm4_normal.png);
+	            this.sprBgmNumber = cc.Sprite.create(s_bgm4_normal_png);
 	            break;
 	        case 5:
 	            this.sprBgmNumber = cc.Sprite.create(s_bgm1_fast_png);

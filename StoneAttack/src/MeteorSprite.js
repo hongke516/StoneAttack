@@ -13,17 +13,18 @@ var MeteorSprite = cc.Sprite.extend({
 	MeteorX: Math.floor(Math.random() * 1000 % 360), MeteorY: 680,
 
 	construct: function(x) {
-		this.dropSpeed = Math.floor(Math.random() * 1000) % (this.maxDropSpeed - this.minDropSpeed) + this.minDropSpeed;
-		if(x) {
+		// this.dropSpeed = Math.floor(Math.random() * 1000) % (this.maxDropSpeed - this.minDropSpeed) + this.minDropSpeed;
+		this.dropSpeed = Math.floor(Math.random() * (this.maxDropSpeed - this.minDropSpeed)) + this.minDropSpeed;		
+		// if(x) {
 			this.MeteorX = x;
-		}
+		// }
 	},
 
-	create: function() {
+	create: function(x) {
 		var pobSprite = new MeteorSprite();
-		pobSprite.construct();
-		var randNum = Math.floor(Math.random() * 10 % 4);
-		if(pobSprite && pobSprite.initWithFile(randNum == 0 ? s_metheo1_png : randNum == 1 ? s_metheo2_png : randNum == 3 ? s_metheo3_png : s_metheo4_png)) {
+		pobSprite.construct(x);
+		var randNum = Math.floor(Math.random() * 4);
+		if(pobSprite && pobSprite.initWithFile(randNum == 0 ? s_metheo1_png : randNum == 1 ? s_metheo2_png : randNum == 2 ? s_metheo3_png : s_metheo4_png)) {
 			return pobSprite;
 		}
 

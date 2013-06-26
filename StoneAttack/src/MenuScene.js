@@ -98,7 +98,7 @@ var MenuLayer = cc.Layer.extend
     
     clickInfo:function()
     {
-    	var win = window.open('http://fb.com/StoneAttack', 'fb_stoneattack');
+    	var win = window.open('http://facebook.com/StoneAttack', 'facebook_stoneattack');
     	win.focus();
     },
     
@@ -168,9 +168,10 @@ var MenuLayer = cc.Layer.extend
 	    this.layerOptionBox.setVisible(false);
 	    this.menuBtnSetting.setVisible(true);
 	    
+	    this.stopAllBackgroundMusic();
 	    // CocosDenshion::SimpleAudioEngine* instance = CocosDenshion::SimpleAudioEngine::sharedEngine();
 	    // instance->stopBackgroundMusic();
-	    cc.AudioEngine.getInstance().stopMusic();
+	    // cc.AudioEngine.getInstance().stopMusic();
 	
 	    if(GameData.gameState != GameData.STATE_RECORD)
 	    {
@@ -547,6 +548,8 @@ var MenuLayer = cc.Layer.extend
 	        this.unschedule(this.updateLabelToStart);
 	        this.labelTouchAnywhereToStart.setVisible(false);
 	        
+	        this.stopAllBackgroundMusic();
+	        
 	        GameData.gameState = GameData.STATE_MENU;
 	        return;
     	}
@@ -859,7 +862,7 @@ var MenuLayer = cc.Layer.extend
 	            this.sprBgmNumber = cc.Sprite.create(s_bgm3_normal_png);
 	            break;
 	        case 4:
-	            this.sprBgmNumber = cc.Sprite.create(s_bgm4_normal.png);
+	            this.sprBgmNumber = cc.Sprite.create(s_bgm4_normal_png);
 	            break;
 	        case 5:
 	            this.sprBgmNumber = cc.Sprite.create(s_bgm1_fast_png);
@@ -1027,8 +1030,8 @@ var MenuLayer = cc.Layer.extend
 	    if(!(GameData.gameState == GameData.STATE_INTRO))
 	    {
 	        this.schedule(this.updateBalloon);
-	        sprBalloon.setVisible(false);
-	        labelToStartPeriod = 120;
+	        this.sprBalloon.setVisible(false);
+	        this.labelToStartPeriod = 120;
 	    }   	
     },
     
@@ -1075,22 +1078,77 @@ var MenuLayer = cc.Layer.extend
     	}
     },
     
-    startBackgroundMusic:function()
-    {
+	startBackgroundMusic:function()
+	{
+	    // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
+	    // instance.stopBackgroundMusic();
+	    ////
+	    if(!GameData.isMusicSound)
+	    {
+	    	return;
+	    }
+	    
+	    if(GameData.gameState == GameData.STATE_INTRO)
+	    {
+	        SoundControl.Sound[s_BGM2_normal_mp3].play();
+	        return;
+	    }
+	    
+	    this.stopAllBackgroundMusic();
+	    
+	    var bgmNumber = GameData.currentBgmNumber;
+	    if(bgmNumber == 0)
+	    {
+	        bgmNumber = Math.floor(Math.random() * 7) + 1;
+	    }
+	    
+        switch(bgmNumber)
+        {
+            case 1:
+  				SoundControl.Sound[s_BGM1_normal_mp3].play();          
+                // instance.playBackgroundMusic("BGM1-normal.mp3", true);
+                break;
+            case 2:
+            	SoundControl.Sound[s_BGM2_normal_mp3].play();
+                // instance.playBackgroundMusic("BGM2-normal.mp3", true);
+                break;
+            case 3:
+            	SoundControl.Sound[s_BGM3_normal_mp3].play();
+                // instance.playBackgroundMusic("BGM3-normal.mp3", true);
+                break;
+            case 4:
+	            SoundControl.Sound[s_BGM4_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM4-fast.mp3", true);
+                break;
+            case 5:
+            	SoundControl.Sound[s_BGM1_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM1-fast.mp3", true);
+                break;
+            case 6:
+            	SoundControl.Sound[s_BGM2_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM2-fast.mp3", true);
+                break;
+            case 7:
+            	SoundControl.Sound[s_BGM3_fast_mp3].play();
+                // instance.playBackgroundMusic("BGM3-fast.mp3", true);
+                break;
+        }
+	},
+	
+	stopAllBackgroundMusic:function()
+	{
     	SoundControl.Sound[s_BGM1_normal_mp3].stop();
     	SoundControl.Sound[s_BGM1_fast_mp3].stop();
     	SoundControl.Sound[s_BGM2_normal_mp3].stop();
     	SoundControl.Sound[s_BGM2_fast_mp3].stop();
     	SoundControl.Sound[s_BGM3_normal_mp3].stop();
     	SoundControl.Sound[s_BGM3_fast_mp3].stop();
-    	SoundControl.Sound[s_BGM4_fast_mp3].stop();
-    	
-	    SoundControl.Sound[s_BGM1_normal_mp3].play();	
-    },
-    
+    	SoundControl.Sound[s_BGM4_fast_mp3].stop();	   		
+	},	
+	    
     saveFile:function()
     {
-    	
+    	GameCache.save();
     }
     
     // keyBackClicked:function(){}
