@@ -1,9 +1,6 @@
 (function() {
 	"use strict";
 
-	var ccp = cc.p;
-	var ccc3 = cc.c3b;
-
 	var GameData =
 	{
 		// int
@@ -137,4 +134,5 @@
 	}	
 	
 	window.GameData = GameData;
+	window.ccp = cc.p;
 })();
