@@ -44,10 +44,12 @@
             'src/RatingScene.js',            
             'src/GameScene.js',
             'src/MenuScene.js',
-            'src/GameData.js'/*,
+            'src/GameData.js',
             'src/MeteorSprite.js',
             'src/MeteorMaker.js',
-            'src/ParticleExplosionSprite.js'*///add your own files in order here
+            'src/ParticleExplosionSprite.js',
+            'src/GameCache.js',
+            ///add your own files in order here
         ]
     };
 

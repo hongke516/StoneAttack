@@ -687,8 +687,8 @@ var MenuLayer = cc.Layer.extend
     
     initSpriteTitle:function()
     {
-    	this.sprTitle1 = cc.Sprite.create("res/newtitle1.png");
-    	this.sprTitle2 = cc.Sprite.create("res/newtitle2.png");
+    	this.sprTitle1 = cc.Sprite.create(s_newtitle1_png);
+    	this.sprTitle2 = cc.Sprite.create(s_newtitle2_png);
     	
     	switch(GameData.gameState)
     	{
@@ -714,7 +714,7 @@ var MenuLayer = cc.Layer.extend
     
     initSpriteBackground:function()
     {
-    	var sprBackground = cc.Sprite.create("res/GameScene_background.png");
+    	var sprBackground = cc.Sprite.create(s_GameScene_background_png);
     	sprBackground.setScale(1.5);
     	sprBackground.setPosition(cc.p(450, 300));
     	this.addChild(sprBackground);	
@@ -722,7 +722,7 @@ var MenuLayer = cc.Layer.extend
     
     initSpritePlanet:function()
     {
-    	this.sprPlanet = cc.Sprite.create("res/planet.png");
+    	this.sprPlanet = cc.Sprite.create(s_planet_png);
     	this.sprPlanet.setPosition(cc.p(450, 100));
     	this.sprPlanet.setRotation(this.currentAngle);
     	this.addChild(this.sprPlanet);
@@ -730,7 +730,7 @@ var MenuLayer = cc.Layer.extend
     
     initSpriteCharacter:function()
     {
-    	this.sprCharacter = cc.Sprite.create("res/player_stand.png");
+    	this.sprCharacter = cc.Sprite.create(s_player_stand_png);
     	this.sprCharacter.setScale(0.75);
     	this.sprCharacter.setPosition(cc.p(450, 277));
     	this.addChild(this.sprCharacter);
@@ -743,13 +743,13 @@ var MenuLayer = cc.Layer.extend
 	    var menuItem1 = cc.MenuItemImage.create(s_menu1_on_png, s_menu1_off_png, this.clickNormalMode, this);
 	    this.menu1 = cc.Menu.create(menuItem1, null);
 	    
-	    var menuItem2 = cc.MenuItemImage.create("res/menu2_on.png", "res/menu2_off.png", this.clickHardcoreMode, this);
+	    var menuItem2 = cc.MenuItemImage.create(s_menu2_on_png, s_menu2_off_png, this.clickHardcoreMode, this);
 	    this.menu2 = cc.Menu.create(menuItem2, null);
 	    
-	    var menuItem3 = cc.MenuItemImage.create("res/menu3_on.png", "res/menu3_off.png", this.clickRecord, this);
+	    var menuItem3 = cc.MenuItemImage.create(s_menu3_on_png, s_menu3_off_png, this.clickRecord, this);
 	    this.menu3 = cc.Menu.create(menuItem3, null);
 	    
-	    var menuItem4 = cc.MenuItemImage.create("res/menu_info_on.png", "res/menu_info_off.png", this.clickInfo, this);
+	    var menuItem4 = cc.MenuItemImage.create(s_menu_info_on_png, s_menu_info_off_png, this.clickInfo, this);
 	    this.menu4 = cc.Menu.create(menuItem4, null);
 
 	    var angle = 360 - this.currentAngle;
