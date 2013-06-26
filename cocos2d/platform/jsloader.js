@@ -216,7 +216,7 @@
                 //TODO: code for updating progress bar
                 
                 if(f.indexOf('SoundControl') > -1) {
-                    // window.SoundControl.Load();
+                    window.SoundControl.Load();
                 }
             }
         };
@@ -233,7 +233,7 @@
                 //TODO: code for updating progress bar
 
                 if(f.indexOf('SoundControl') > -1) {
-                    // window.SoundControl.Load();
+                    window.SoundControl.Load();
                 }
             };
             d.body.appendChild(s);
