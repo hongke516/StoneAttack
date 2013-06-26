@@ -62,11 +62,46 @@ var GameLayer = cc.Layer.extend
 //array.splice(2,1) array.length, array.push, array[0]
     init:function ()
     {
-        var selfPointer = this;
+//        var selfPointer = this;
         // 1. super init first
         this._super();
 		GameData.gameScene = this;
 		
+	    GameData.gameState = GameData.STATE_PLAYING;
+	    	    
+	    this.initEtc();
+	    this.initPlayerState();
+	    //    this.initLayerRotate();
+	    this.initSpriteBackground();
+	    this.initBtnPause();
+	    this.initMenuItemBtnPause();
+	    this.initSpritePlanet();
+	    this.initSpriteCharacter();
+	    this.initSpriteShield();
+	    
+	    this.initSpriteStateBar();
+	    this.initBMFont();
+	    this.initLayerParticle();
+	    this.initLayerFlash();
+	    this.initOptionBox();
+	    this.initGameover();
+
+//	    this.schedule(this.update);
+	    
+	    if(GameData.isHardCore)
+	    {
+	        MeteorMaker.makeCoolTime = 15;
+	        MeteorSprite.minDropSpeed = 8;
+	        MeteorSprite.maxDropSpeed = 9;
+	    }
+	    else
+	    {
+	        MeteorMaker.makeCoolTime = 25;
+	        MeteorSprite.minDropSpeed = 2;
+	        MeteorSprite.maxDropSpeed = 4;
+	    }
+	    
+//	    this.startGame();		
 		
 		this.setKeyboardEnabled(true);
         this.setTouchEnabled(true);
@@ -102,24 +137,24 @@ var GameLayer = cc.Layer.extend
     {
     	var sprBackground = cc.Sprite.create(s_GameScene_background_png);
     	sprBackground.setScale(1.5);
-    	sprBackground.setPosition(cc.p(450, 300));
-    	this.addChild(sprBackground);	
+    	sprBackground.setPosition(cc.p(GameData.planetCenterX, 300));
+    	this.addChild(sprBackground, 1);	
     },
 	
     initSpritePlanet:function()
     {
     	this.sprPlanet = cc.Sprite.create(s_planet_png);
-    	this.sprPlanet.setPosition(cc.p(450, 100));
-    	this.sprPlanet.setRotation(this.currentAngle);
-    	this.addChild(this.sprPlanet);
+    	this.sprPlanet.setPosition(cc.p(GameData.planetCenterX, GameData.playerCenterY));
+    	this.sprPlanet.setRotation(GameData.playerX);
+    	this.addChild(this.sprPlanet, 8);
     },
 	
     initSpriteCharacter:function()
     {
     	this.sprCharacter = cc.Sprite.create(s_player_stand_png);
     	this.sprCharacter.setScale(0.75);
-    	this.sprCharacter.setPosition(cc.p(450, 277));
-    	this.addChild(this.sprCharacter);
+    	this.sprCharacter.setPosition(cc.p(GameData.planetCenterX, GameData.planetCenterY + 177));
+    	this.addChild(this.sprCharacter, 4);
     },
 	
 	initSpriteStateBar:function()
@@ -419,12 +454,12 @@ var GameLayer = cc.Layer.extend
 
 	initGameover:function()
 	{
-	    layerGameover = cc.Layer.create();
+	    this.layerGameover = cc.Layer.create();
 	    
 	    var sprGameover = cc.Sprite.create(s_gameover_png);
 	    sprGameover.setPosition(ccp(450, 355));
 	    sprGameover.setScale(1.2);
-	    this.layerGameover.addChild(this.sprGameover);
+	    this.layerGameover.addChild(sprGameover);
 	    this.layerGameover.setVisible(false);
 	    
 	    this.addChild(this.layerGameover, 9);
@@ -448,7 +483,16 @@ var GameLayer = cc.Layer.extend
 	    this.sprHighestScore.setScale(0.45);
 	    this.sprHighestScore.setVisible(false);
 	    this.addChild(this.sprHighestScore, 9);
-	}
+	},
+	
+	initPlayerState:function()
+	{
+	    this.currentHP = GameData.HP_MAX;
+	    this.runMode = 0;
+	    this.currentRunAnimation = 0;
+	    this.runReverse = false;
+	    //    isMagnet = true;
+	}	
 });
 
 var GameScene = cc.Scene.extend

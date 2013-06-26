@@ -103,7 +103,7 @@ var MenuLayer = cc.Layer.extend
     
     clickRecord:function()
     {
-    	this.startSoundEffect(s_pong_wav);
+    	this.startSoundEffect(s_pong_mp3);
     	this.menuBtnSetting.setVisible(false);
     	
     	GameData.gameState = GameData.STATE_RECORD;
@@ -116,7 +116,7 @@ var MenuLayer = cc.Layer.extend
     
     clickBtnOption:function()
     {
-    	this.startSoundEffect(s_pong_wav);
+    	this.startSoundEffect(s_pong_mp3);
     	this.layerOptionBox.setVisible(true);
     	this.menuBtnSetting.setVisible(false);
     	this.menu1.setEnabled(false);
@@ -133,7 +133,7 @@ var MenuLayer = cc.Layer.extend
     clickOptionMusic:function()
     {
 	    GameData.isMusicSound = !GameData.isMusicSound;    
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    this.saveFile();
 	    
 	    if(GameData.isMusicSound)
@@ -152,13 +152,13 @@ var MenuLayer = cc.Layer.extend
     clickOptionSE:function()
     {
     	GameData.isSoundEffect = !GameData.isSoundEffect;
-    	this.startSoundEffect(s_pong_wav);
+    	this.startSoundEffect(s_pong_mp3);
     	this.saveFile();
     },
     
     clickOptionExit:function()
     {
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    this.isOptionPanel = false;
 	    this.menu1.setEnabled(true);
 	    this.menu2.setEnabled(true);
@@ -180,7 +180,7 @@ var MenuLayer = cc.Layer.extend
     
 	clickOptionBgmLeft:function()
 	{
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    switch(GameData.currentBgmNumber)
 	    {
 	        case 0:
@@ -229,7 +229,7 @@ var MenuLayer = cc.Layer.extend
 	
 	clickOptionBgmRight:function()
 	{
-	    this.startSoundEffect(s_pong_wav);
+	    this.startSoundEffect(s_pong_mp3);
 	    switch(GameData.currentBgmNumber)
 	    {
 	        case 0:
@@ -570,7 +570,7 @@ var MenuLayer = cc.Layer.extend
 	            {
 	                return;
 	            }
-	            this.startSoundEffect(s_pong_wav);
+	            this.startSoundEffect(s_pong_mp3);
 	            this.schedule(this.updateRecordAnimation);
 	            this.layerRecord.setVisible(false);
 	            this.labelVersion.setVisible(false);
@@ -607,7 +607,7 @@ var MenuLayer = cc.Layer.extend
 	    		case cc.KEY.left:
 	    			this.runMode = 2;
 	    			this.schedule(this.rightGesture);
-	    			this.startSoundEffect(s_pong_wav);
+	    			this.startSoundEffect(s_pong_mp3);
 	    		    this.unschedule(this.updateBalloon);
 	    		    this.sprBalloon.setVisible(false);
 			        this.menu1.setEnabled(false);
@@ -618,7 +618,7 @@ var MenuLayer = cc.Layer.extend
 	    		case cc.KEY.right:
 	    			this.runMode = -2;
 	    			this.schedule(this.leftGesture);
-	    			this.startSoundEffect(s_pong_wav);
+	    			this.startSoundEffect(s_pong_mp3);
 			        this.unschedule(this.updateBalloon);
 		    	    this.sprBalloon.setVisible(false);
 			        this.menu1.setEnabled(false);
@@ -1072,7 +1072,6 @@ var MenuLayer = cc.Layer.extend
     	{
     		cc.AudioEngine.getInstance().playEffect(fileName);
     	}
-    	cc.log(GameData.isSoundEffect + "");	
     },
     
     startBackgroundMusic:function()
