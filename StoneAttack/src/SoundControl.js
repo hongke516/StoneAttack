@@ -67,7 +67,7 @@
 			this.Sound[soundName].pause();
 		},
 
-		Stop: function() {
+		Stop: function(soundName) {
 			if(!this.Sound.hasOwnProperty(soundName)) {
 				console.warn('soundFile', soundName, 'not found.');
 				return;
