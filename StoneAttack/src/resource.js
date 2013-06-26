@@ -194,15 +194,15 @@ var g_ressources = [
 
     //bgm, soundEffect
 //    {src:s_itemgot_wav},
-	{src:s_pong_mp3},
-	{src:s_puck_mp3},
-  	{src:s_BGM1_fast_mp3},
-  	{src:s_BGM1_normal_mp3},
-  	{src:s_BGM2_fast_mp3},
-  	{src:s_BGM2_normal_mp3},
-  	{src:s_BGM3_fast_mp3},
-  	{src:s_BGM3_normal_mp3},
-  	{src:s_BGM4_fast_mp3},
+	// {src:s_pong_mp3},
+	// {src:s_puck_mp3},
+  	// {src:s_BGM1_fast_mp3},
+  	// {src:s_BGM1_normal_mp3},
+  	// {src:s_BGM2_fast_mp3},
+  	// {src:s_BGM2_normal_mp3},
+  	// {src:s_BGM3_fast_mp3},
+  	// {src:s_BGM3_normal_mp3},
+  	// {src:s_BGM4_fast_mp3},
     //effect
     
 ];
