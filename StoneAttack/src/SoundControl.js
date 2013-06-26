@@ -6,19 +6,18 @@
 	// var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(js, s);
 
 	var SoundControl = {
-		SoundList: {
-			s_BGM1_fast_mp3: s_BGM1_fast_mp3,
-			s_BGM1_normal_mp3: s_BGM1_normal_mp3,
-			s_BGM2_fast_mp3: s_BGM2_fast_mp3,
-			s_BGM2_normal_mp3: s_BGM2_normal_mp3,
-			s_BGM3_fast_mp3: s_BGM3_fast_mp3,
-			s_BGM3_normal_mp3: s_BGM3_normal_mp3,
-			s_BGM4_fast_mp3: s_BGM4_fast_mp3,
-
+		SoundList: [
+			s_BGM1_fast_mp3,
+			s_BGM1_normal_mp3,
+			s_BGM2_fast_mp3,
+			s_BGM2_normal_mp3,
+			s_BGM3_fast_mp3,
+			s_BGM3_normal_mp3,
+			s_BGM4_fast_mp3,
 			s_itemgot_mp3: s_itemgot_mp3,
 			s_pong_mp3: s_pong_mp3,
 			s_puck_mp3: s_puck_mp3
-		},
+		],
 
 		Sound: {
 		},
@@ -30,9 +29,9 @@
 				debugMode: false,
 				useHighPerformance: true,
 				onready: function() {
-					for(var sound in SoundControl.SoundList) {
-						SoundControl.Sound[sound] = soundManager.createSound({
-							url: sound,
+					for(var i = 0; i < SoundControl.SoundList.length; i++) {
+						SoundControl.Sound[sound[i]] = soundManager.createSound({
+							url: sound[i],
 							autoLoad: true
 						});
 					}
