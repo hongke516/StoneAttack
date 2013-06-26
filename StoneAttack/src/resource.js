@@ -100,8 +100,8 @@ var s_BGM3_fast_mp3 = "res/BGM3-fast.mp3";
 var s_BGM3_normal_mp3 = "res/BGM3-normal.mp3";
 var s_BGM4_fast_mp3 = "res/BGM4-fast.mp3";
 
-var s_itemgot_wav = "res/itemgot.wav";
-var s_pong_wav = "res/pong.wav";
+var s_itemgot_mp3 = "res/itemgot.mp3";
+var s_pong_mp3 = "res/pong.mp3";
 var s_puck_mp3 = "res/puck.mp3";
 
 var g_ressources = [
@@ -194,7 +194,7 @@ var g_ressources = [
 
     //bgm, soundEffect
 //    {src:s_itemgot_wav},
-	{src:s_pong_wav},
+	{src:s_pong_mp3},
 	{src:s_puck_mp3},
   	{src:s_BGM1_fast_mp3},
   	{src:s_BGM1_normal_mp3},
