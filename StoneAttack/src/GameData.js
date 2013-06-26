@@ -2,7 +2,6 @@
 	"use strict";
 
 	var ccp = cc.p;
-	var ccc4 = cc.c4b;
 	var ccc3 = cc.c3b;
 
 	var GameData =
@@ -27,7 +26,6 @@
 		playerX: 0,
 		gameScene: null,
 		currentScore: 0,
-		
 	};
 /*	
 	var cosTable = [], sinTable = [];
