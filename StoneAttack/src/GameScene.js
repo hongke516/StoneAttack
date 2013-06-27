@@ -59,7 +59,7 @@ var GameLayer = cc.Layer.extend
 	// sprRightController:null,
 	layerGameOver:null,
 	sprHighestScore:null,
-	
+	////
 	key:null,
 	lastMeteor:null,
 	
@@ -176,16 +176,19 @@ var GameLayer = cc.Layer.extend
 	
 	makeShieldParticle:function(meteor)
 	{
-	    var tempParticle = ParticleExplosionSprite.createWithPoint(s_shield_particle_png, meteor.sprite.getPosition());
-	    this.addChild(tempParticle, 5);
-	    tempParticle.setDeltaOpacity(10);
+	    /*var tempParticle = */ParticleExplosionSprite.createWithPoint(s_shield_particle_png, meteor.sprite.getPosition());
+	    // this.addChild(tempParticle.sprite, 5);
+	    ////
+		this/*.layerParticle*/.addChild(ParticleExplosionSprite.items[ParticleExplosionSprite.items.length - 1].sprite, 5);	    
+//	    tempParticle.deltaOpacity(10);
 	    // tempParticle.start();
 	},
 	
 	makeRotationParticle:function(position)
 	{
-	    var tempParticle = ParticleExplosionSprite.createWithPoint(s_star_particle_png, position);
-	    this.layerParticle.addChild(tempParticle);
+	    /*var tempParticle = */ParticleExplosionSprite.createWithPoint(s_star_particle_png, position);
+	    // this.layerParticle.addChild(tempParticle.sprite);
+		this.layerParticle.addChild(ParticleExplosionSprite.items[ParticleExplosionSprite.items.length - 1].sprite);	    
 	    //tempParticle.start();
 	},
 	/*
@@ -787,6 +790,8 @@ var GameLayer = cc.Layer.extend
 	    	this.arrayMeteorMaker[i].update();
 	    }	
 	    MeteorSprite.update();
+	    ParticleExplosionSprite.updatePoint();
+	    
 	    /*    	    
 	    for(var i=0; i<this.arrayMeteorites.length; i++)
 	    {
