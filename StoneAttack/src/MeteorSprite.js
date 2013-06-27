@@ -83,8 +83,6 @@ var MeteorSprite = {
 			var x  = GameData.planetCenterX + Math.cos(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.items[i].MeteorY;
 			var y  = GameData.planetCenterY + Math.sin(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.items[i].MeteorY;
 
-			console.debug(x, y);
-
 			this.items[i].sprite.setPosition(cc.p(x, y));
 			if(this.items[i].MeteorY < 163) {
 				GameData.gameScene.collidePlanet(this);
