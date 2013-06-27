@@ -543,7 +543,6 @@ var GameLayer = cc.Layer.extend
 	    this.startSoundEffect(s_pong_mp3);
 	    //    stopShield();
 	    this.saveHighScore();
-	    //    saveFile();
 	    this.gameResume();
 	    this.gameOver();
 	    this.enterHome();

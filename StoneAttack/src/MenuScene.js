@@ -78,7 +78,7 @@ var MenuLayer = cc.Layer.extend
 
     nextScene:function()
     {	
-    	GameLayer.playerX = this.currentAngle;
+    	GameData.playerX = this.currentAngle;
 		cc.Director.getInstance().replaceScene(new GameScene());
     },
     
