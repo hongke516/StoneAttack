@@ -975,7 +975,7 @@ var MenuLayer = cc.Layer.extend
 	    this.sprBalloon.setFlipX(true);
 	    this.addChild(this.sprBalloon);
 	    
-	    this.labelBalloon = cc.LabelTTF.create("", "나눔고딕", 30);
+	    this.labelBalloon = cc.LabelTTF.create("", "Malgun Gothic", 30);
 	    this.labelBalloon.setPosition(cc.p(140, 130));
 	    this.labelBalloon.setColor(cc.c3b(0, 0, 0));
 	    this.sprBalloon.addChild(this.labelBalloon);

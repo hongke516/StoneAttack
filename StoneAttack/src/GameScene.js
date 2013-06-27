@@ -538,7 +538,8 @@ var GameLayer = cc.Layer.extend
 	clickBtnOption:function()
 	{
 	    this.startSoundEffect(s_pong_mp3);
-	    this.pauseAllBackgroundMusic();
+	    this.stopAllBackgroundMusic();
+//	    this.pauseAllBackgroundMusic();
 	
 	    this.layerOptionBox.setVisible(true);
 	    this.menuStatePause.setVisible(false);
@@ -1059,7 +1060,7 @@ var GameLayer = cc.Layer.extend
     	SoundControl.Sound[s_BGM3_fast_mp3].stop();
     	SoundControl.Sound[s_BGM4_fast_mp3].stop();	   		
 	},
-
+/*
 	pauseAllBackgroundMusic:function()
 	{
     	// SoundControl.Sound[s_BGM1_normal_mp3].pause();
@@ -1098,7 +1099,7 @@ var GameLayer = cc.Layer.extend
 				break;
 		}    		
 	},
-	
+	*/
 	resumeBackgroundMusic:function()
 	{
 		if(!GameData.isMusicSound)
@@ -1296,7 +1297,14 @@ var GameLayer = cc.Layer.extend
 			case cc.KEY.escape:
 				if(GameData.gameState == GameData.STATE_PAUSE)
 				{
-					this.clickBtnResume();
+					if(this.layerOptionBox.isVisible())
+					{
+						this.clickOptionExit();
+					}
+					else
+					{
+						this.clickBtnResume();
+					}
 				}
 				else
 				{

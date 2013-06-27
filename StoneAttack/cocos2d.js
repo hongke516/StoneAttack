@@ -39,7 +39,7 @@
         engineDir: '../cocos2d/',
         appFiles:[
             'src/resource.js',
-            'src/myApp.js',
+            // 'src/myApp.js',
             'src/RatingScene.js',            
             'src/GameScene.js',
             'src/MenuScene.js',

@@ -192,7 +192,7 @@ var g_ressources = [
 	{src:s_bmfontCB64_0_png},
     //tmx
 
-    //bgm, soundEffect
+    //bgm
 //    {src:s_itemgot_wav},
 	// {src:s_pong_mp3},
 	// {src:s_puck_mp3},

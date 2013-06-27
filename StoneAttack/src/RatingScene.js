@@ -13,7 +13,7 @@ var RatingLayer = cc.Layer.extend
 		layerColor.setColor(cc.c3b(255, 255, 255));
 		this.addChild(layerColor);
 		
-		var labelText = cc.LabelTTF.create("이 게임물은 전체이용가 게임물입니다.", "맑은 고딕", 40);
+		var labelText = cc.LabelTTF.create("이 게임물은 전체이용가 게임물입니다.", "Malgun Gothic", 40);
 		labelText.setPosition(cc.p(size.width / 2, size.height / 2));
 		labelText.setColor(cc.c3b(0, 0, 0));
 		layerColor.addChild(labelText);
