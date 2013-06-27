@@ -35,6 +35,10 @@ var RatingLayer = cc.Layer.extend
         
         GameCache.load();
         
+        size = null;
+        layerColor = null;
+        labelText = null;
+        spriteRating = null;
         return true;
     },
     
