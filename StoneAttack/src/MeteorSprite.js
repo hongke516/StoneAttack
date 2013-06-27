@@ -30,7 +30,6 @@ var MeteorSprite = {
 	},
 
 	createShield: function(x) {
-		cc.log("shield");
 		var obj = {
 			currentAngle: 0,
 			isShield: true,
@@ -51,7 +50,6 @@ var MeteorSprite = {
 	},
 
 	createHp: function(x) {
-		cc.log("hp");
 		var obj = {
 			currentAngle: 0,
 			isShield: false,

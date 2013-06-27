@@ -105,6 +105,7 @@ var GameLayer = cc.Layer.extend
 	    }
 	    
 	    this.startGame();		
+		this.startShield();
 		
 		this.setKeyboardEnabled(true);
         this.setTouchEnabled(true);
@@ -127,7 +128,7 @@ var GameLayer = cc.Layer.extend
 	    this.runReverse = false;
 	    this.runMode = 0;
 	    this.currentHP = GameData.HP_MAX;
-	    this.currentScore = 0;
+	    GameData.currentScore = 0;
 	    
 	    this.currentRunAnimation = 0;
 	    this.remainHitCoolTime = 0;
@@ -260,10 +261,12 @@ var GameLayer = cc.Layer.extend
 
 	collidePlanet:function(meteor)
 	{
-	    var dx = meteor.meteoX;
-	    var x = GameData.planetCenterX + GameData.cosTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
-	    var y = GameData.planetCenterY + GameData.sinTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
-	    this.makeRotationParticle(cc.p(x, y));
+	    var dx = meteor.MeteorX;
+	    var x = GameData.planetCenterX + GameData.cosTable[dx < 0 ? dx + 360 : dx] * meteor.MeteorY;
+	    var y = GameData.planetCenterY + GameData.sinTable[dx < 0 ? dx + 360 : dx] * meteor.MeteorY;
+	    // cc.log("meteoY:"+meteor.meteoY + " " + dx + " " + GameData.planetCenterX + " " + GameData.planetCenterY);
+	    // this.makeRotationParticle(cc.p(x, y));
+	    this.makeRotationParticle(cc.p(x, y));	    
 	    
 	    //    int dropSpeed = meteor.dropSpeed;
 	    
@@ -355,7 +358,7 @@ var GameLayer = cc.Layer.extend
 	        this.saveHighScore();
 	        this.gameOver();
 	        this.schedule(this.updateGameOverCoolTime);
-	        this.lastMeteor = this;
+	        this.lastMeteor = meteor;
 	        return;
 	    }
 	    ////
@@ -409,9 +412,10 @@ var GameLayer = cc.Layer.extend
 	    if(this.remainShieldCoolTime <= 0)
 	    {
 	        var scalePlus = cc.ScaleTo.create(0.1,  1.5);
-	        var action = cc.Sequence.create(scalePlus, cc.CallFuncN.create(this, this.stopShield), null);
-	        this.sprShield.runAction(action);
-	        
+	        // var actionTo = cc.CallFunc.create(this, this.stopShield);
+	        // var action = cc.Sequence.create(scalePlus, actionTo, null);
+	        this.sprShield.runAction(/*action*/scalePlus);
+	        this.schedule(this.stopShield, 0, false, 0.1);
 	        return;
 	        //CCSequence.actions(액션,CCCallFuncN.actionWithTarget(this, callfuncN_selector(네임 스페이스.finishChk)), NULL);
 	    }
@@ -421,7 +425,7 @@ var GameLayer = cc.Layer.extend
 	        var scaleActionReverse = cc.ScaleTo.create(0.02, 1.0);
 	        this.sprShield.runAction(cc.Sequence.create(scaleAction, scaleActionReverse, null));
 	        
-	        var perTime = this.remainShieldCoolTime / GameData.remainShieldCoolTimeMax;
+	        var perTime = this.remainShieldCoolTime / this.remainShieldCoolTimeMax;
 	        this.sprShield.setTexture(cc.TextureCache.getInstance().addImage(perTime >= 0.8 ? s_shieldcircle_png : perTime >= 0.6 ? 
 	        	s_shieldcircledmg1_png : perTime >= 0.4 ? s_shieldcircledmg2_png : perTime >= 0.4 ? s_shieldcircledmg3_png : s_shieldcircledmg4_png));
 	    }	    
@@ -943,14 +947,14 @@ var GameLayer = cc.Layer.extend
 	startShield:function()
 	{
 	    this.isShield = true;
-	    this.remainShieldCoolTime = GameData.remainShieldCoolTimeMax;
+	    this.remainShieldCoolTime = this.remainShieldCoolTimeMax;
 	    
 	    this.sprShield.setVisible(true);
 	    this.sprShield.setOpacity(195);
 	    this.sprShield.setTexture(cc.TextureCache.getInstance().addImage(s_shieldcircle_png));
 	    
 	    var scaleAction = cc.ScaleTo.create(0.1,  1.0);
-	    sprShield.runAction(cc.Sequence.create(scaleAction, null));
+	    this.sprShield.runAction(cc.Sequence.create(scaleAction, null));
 	    
 	    this.schedule(this.updateShield);
 	},

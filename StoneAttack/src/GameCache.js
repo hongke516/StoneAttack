@@ -39,10 +39,10 @@
 
 			GameData.isMusicSound = arr[0] == 1 ? true : false;
 			GameData.isSoundEffect = arr[1] == 1 ? true : false;
-			GameData.HighScore.Normal = Number(arr[2]);
-			GameData.HighScore.HardCore = Number(arr[3]);
-			GameData.HighScore.SavedVersion = Number(arr[4]);
-			GameData.currentBgmNumber = Number(arr[5]);
+			GameData.HighScore.Normal = parseInt(arr[2]);
+			GameData.HighScore.Hardcore = parseInt(arr[3]);
+			GameData.HighScore.SavedVersion = parseInt(arr[4]);
+			GameData.currentBgmNumber = parseInt(arr[5]);
 		}
 	};
 
