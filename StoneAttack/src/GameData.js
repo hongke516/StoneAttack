@@ -24,7 +24,7 @@
 		gameScene: null,
 		currentScore: 0,
 	};
-	
+
 	// ADD CONSTANTS
 	Object.defineProperties(GameData, {
 		'STATE_PLAYING':
@@ -56,11 +56,7 @@
 		{
 			value: 6,
 			writable: false
-		}
-	})
-	
-		// ADD CONSTANTS
-	Object.defineProperties(GameData, {
+		},
 		'planetCenterX':
 		{
 			value: 450,
