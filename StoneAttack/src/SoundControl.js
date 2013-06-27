@@ -32,7 +32,11 @@
 					for(var i = 0; i < SoundControl.SoundList.length; i++) {
 						SoundControl.Sound[SoundControl.SoundList[i]] = soundManager.createSound({
 							url: SoundControl.SoundList[i],
-							autoLoad: true
+							autoLoad: true,
+							onfinish: function() {
+								if(this.hasOwnProperty('isLoop') && (this.isLoop == 1 || this.isLoop == true))
+									this.play();
+							}
 						});
 					}
 				}
