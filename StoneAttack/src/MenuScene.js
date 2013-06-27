@@ -144,7 +144,8 @@ var MenuLayer = cc.Layer.extend
 	    else
 	    {
 	        this.layerBgmChoice.setVisible(false);
-	        cc.AudioEngine.getInstance().stopMusic();
+	        this.stopAllBackgroundMusic();
+	        // cc.AudioEngine.getInstance().stopMusic();
 	        // CocosDenshion::SimpleAudioEngine* instance = CocosDenshion::SimpleAudioEngine::sharedEngine();
 	        // instance->stopBackgroundMusic();
 	    }    	
@@ -462,7 +463,8 @@ var MenuLayer = cc.Layer.extend
 	        this.remainFrame--;
 	        if(this.remainFrame == 0)
 	        {
-	        	cc.AudioEngine.getInstance().stopMusic();
+	        	this.stopAllBackgroundMusic();
+	        	// cc.AudioEngine.getInstance().stopMusic();
 //	            CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	            this.menu1.setOpacity(15);
 	            this.menu2.setOpacity(15);
@@ -1074,7 +1076,8 @@ var MenuLayer = cc.Layer.extend
     {
     	if(GameData.isSoundEffect)
     	{
-    		SoundControl.Sound[fileName].play();
+    		cc.AudioEngine.getInstance().playEffect(fileName);
+//    		SoundControl.Sound[fileName].play();
     	}
     },
     
@@ -1083,14 +1086,18 @@ var MenuLayer = cc.Layer.extend
 	    // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
 	    // instance.stopBackgroundMusic();
 	    ////
+	    
 	    if(!GameData.isMusicSound)
 	    {
 	    	return;
 	    }
 	    
+//	    var instance = cc.AudioEngine.getInstance();
+	    
 	    if(GameData.gameState == GameData.STATE_INTRO)
 	    {
 	        SoundControl.Sound[s_BGM2_normal_mp3].play();
+			// instance.playMusic(s_BGM2_normal_mp3, true);
 	        return;
 	    }
 	    
@@ -1105,38 +1112,46 @@ var MenuLayer = cc.Layer.extend
         switch(bgmNumber)
         {
             case 1:
-  				SoundControl.Sound[s_BGM1_normal_mp3].play();          
+  				SoundControl.Sound[s_BGM1_normal_mp3].play({loop:999});    
+  				// instance.playMusic(s_BGM1_normal_mp3, true);      
                 // instance.playBackgroundMusic("BGM1-normal.mp3", true);
                 break;
             case 2:
-            	SoundControl.Sound[s_BGM2_normal_mp3].play();
+            	SoundControl.Sound[s_BGM2_normal_mp3].play({loop:999});
+            	// instance.playMusic(s_BGM2_normal_mp3, true);
                 // instance.playBackgroundMusic("BGM2-normal.mp3", true);
                 break;
             case 3:
-            	SoundControl.Sound[s_BGM3_normal_mp3].play();
+            	SoundControl.Sound[s_BGM3_normal_mp3].play({loop:999});
+            	// instance.playMusic(s_BGM3_normal_mp3, true);
                 // instance.playBackgroundMusic("BGM3-normal.mp3", true);
                 break;
             case 4:
-	            SoundControl.Sound[s_BGM4_fast_mp3].play();
+	            SoundControl.Sound[s_BGM4_fast_mp3].play({loop:999});
+	            // instance.playMusic(s_BGM4_fast_mp3, true);
                 // instance.playBackgroundMusic("BGM4-fast.mp3", true);
                 break;
             case 5:
-            	SoundControl.Sound[s_BGM1_fast_mp3].play();
+            	SoundControl.Sound[s_BGM1_fast_mp3].play({loop:999});
+            	// instance.playMusic(s_BGM1_fast_mp3, true);
                 // instance.playBackgroundMusic("BGM1-fast.mp3", true);
                 break;
             case 6:
-            	SoundControl.Sound[s_BGM2_fast_mp3].play();
+            	SoundControl.Sound[s_BGM2_fast_mp3].play({loop:999});
+            	// instance.playMusic(s_BGM2_fast_mp3, true);
                 // instance.playBackgroundMusic("BGM2-fast.mp3", true);
                 break;
             case 7:
-            	SoundControl.Sound[s_BGM3_fast_mp3].play();
+            	SoundControl.Sound[s_BGM3_fast_mp3].play({loop:999});
+            	// instance.playMusic(s_BGM2_fast_mp3, true);
                 // instance.playBackgroundMusic("BGM3-fast.mp3", true);
                 break;
         }
 	},
-	
+
 	stopAllBackgroundMusic:function()
 	{
+		// cc.AudioEngine.getInstance().stopMusic();
     	SoundControl.Sound[s_BGM1_normal_mp3].stop();
     	SoundControl.Sound[s_BGM1_fast_mp3].stop();
     	SoundControl.Sound[s_BGM2_normal_mp3].stop();

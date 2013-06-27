@@ -18,7 +18,7 @@ var MeteorSprite = {
 		};
 
 		var randNum = Math.floor(Math.random() * 4);
-		var img = pobSprite.initWithFile(randNum == 0 ? s_metheo1_png : randNum == 1 ? s_metheo2_png : randNum == 2 ? s_metheo3_png : s_metheo4_png));
+		var img = (randNum == 0 ? s_metheo1_png : randNum == 1 ? s_metheo2_png : randNum == 2 ? s_metheo3_png : s_metheo4_png);
 		var sprite = cc.Sprite.create(img);
 
 		this.items.push(obj);

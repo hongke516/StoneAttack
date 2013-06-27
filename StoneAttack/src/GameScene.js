@@ -59,6 +59,9 @@ var GameLayer = cc.Layer.extend
 	// sprRightController:null,
 	layerGameOver:null,
 	sprHighestScore:null,
+	
+	key:null,
+	
 //array.splice(2,1) array.length, array.push, array[0]
     init:function ()
     {
@@ -194,27 +197,27 @@ var GameLayer = cc.Layer.extend
 	*/
 	makeMeteor:function(x)
 	{////
-//	    var buf = MeteorSprite.protytype.create(x);
-		var buf = new MeteorSprite();
-		buf.construct(x);
-		var randNum = Math.floor(Math.random() * 4);
-		switch(randNum)
-		{
-			case 0:
-				buf.initWithFile(s_metheo1_png);
-				break;
-			case 1:
-				buf.initWithFile(s_metheo2_png);
-				break;
-			case 2:
-				buf.initWithFile(s_metheo3_png);
-				break;
-			case 3:
-				buf.initWithFile(s_metheo4_png);
-				break;
-		}
+	    var buf = MeteorSprite.create(x);
+//		var buf = new MeteorSprite();
+		// buf.construct(x);
+		// var randNum = Math.floor(Math.random() * 4);
+		// switch(randNum)
+		// {
+			// case 0:
+				// buf.initWithFile(s_metheo1_png);
+				// break;
+			// case 1:
+				// buf.initWithFile(s_metheo2_png);
+				// break;
+			// case 2:
+				// buf.initWithFile(s_metheo3_png);
+				// break;
+			// case 3:
+				// buf.initWithFile(s_metheo4_png);
+				// break;
+		// }
 		
-	    this.addChild(buf, 6);
+	    this.addChild(buf.sprite, 6);
 	    this.arrayMeteorites.push(buf);
 	},
 	
@@ -239,7 +242,7 @@ var GameLayer = cc.Layer.extend
 	{
 	    // var buf = MeteorMaker.create();
 		var buf = new MeteorMaker();
-//		buf.construct(Math.floor(Math.random() * 360));	    
+		buf.construct(Math.floor(Math.random() * 360));	    
 	    this.arrayMeteorMaker.push(buf);
 	},
 
@@ -434,7 +437,7 @@ var GameLayer = cc.Layer.extend
 	    var count = this.arrayMeteorites.length;
 	    for(var i = count-1; i >= 0; i--)
 	    {
-	        var buf = arrayMeteorites[i];
+	        var buf = this.arrayMeteorites[i];
 	        this.removeChild(buf, true);
 	        this.arrayMeteorites.splice(i);
 //	        this.removeChild(buf, true);
@@ -577,6 +580,7 @@ var GameLayer = cc.Layer.extend
 	    
 	    if(this.bgmSettingChanged)
 	    {
+	    	this.stopAllBackgroundMusic();
 	    	////
 	        // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
 	        // instance.stopBackgroundMusic();
@@ -985,31 +989,31 @@ var GameLayer = cc.Layer.extend
         switch(bgmNumber)
         {
             case 1:
-  				SoundControl.Sound[s_BGM1_normal_mp3].play();          
+  				SoundControl.Sound[s_BGM1_normal_mp3].play({loop:999});          
                 // instance.playBackgroundMusic("BGM1-normal.mp3", true);
                 break;
             case 2:
-            	SoundControl.Sound[s_BGM2_normal_mp3].play();
+            	SoundControl.Sound[s_BGM2_normal_mp3].play({loop:999});
                 // instance.playBackgroundMusic("BGM2-normal.mp3", true);
                 break;
             case 3:
-            	SoundControl.Sound[s_BGM3_normal_mp3].play();
+            	SoundControl.Sound[s_BGM3_normal_mp3].play({loop:999});
                 // instance.playBackgroundMusic("BGM3-normal.mp3", true);
                 break;
             case 4:
-	            SoundControl.Sound[s_BGM4_fast_mp3].play();
+	            SoundControl.Sound[s_BGM4_fast_mp3].play({loop:999});
                 // instance.playBackgroundMusic("BGM4-fast.mp3", true);
                 break;
             case 5:
-            	SoundControl.Sound[s_BGM1_fast_mp3].play();
+            	SoundControl.Sound[s_BGM1_fast_mp3].play({loop:999});
                 // instance.playBackgroundMusic("BGM1-fast.mp3", true);
                 break;
             case 6:
-            	SoundControl.Sound[s_BGM2_fast_mp3].play();
+            	SoundControl.Sound[s_BGM2_fast_mp3].play({loop:999});
                 // instance.playBackgroundMusic("BGM2-fast.mp3", true);
                 break;
             case 7:
-            	SoundControl.Sound[s_BGM3_fast_mp3].play();
+            	SoundControl.Sound[s_BGM3_fast_mp3].play({loop:999});
                 // instance.playBackgroundMusic("BGM3-fast.mp3", true);
                 break;
         }
@@ -1213,6 +1217,49 @@ var GameLayer = cc.Layer.extend
 	stopTouchSchedule:function()
 	{
 	    this.unschedule(this.screenTouching);
+	},
+	
+	onKeyDown:function(e)
+	{
+	    if(GameData.gameState == GameData.STATE_GAMEOVER)
+	    {
+	        if(this.remainGameOverCoolTime == 0 && this.layerGameover.isVisible())
+	        {
+	            this.startSoundEffect("pong.mp3");
+	            this.enterHome();
+	        }
+	        return;
+	    }
+	    switch(e)
+		{
+			case cc.KEY.escape:
+			break;
+			
+			case cc.KEY.space:
+			case cc.KEY.enter:
+			break;
+			
+			case cc.KEY.shift:
+			if(this.runMode == 1 || this.runMode == -1)
+			{
+				this.runMode *= 2;
+			}
+			break;
+			
+			case cc.KEY.left:
+			this.key = e;
+			break;
+			case cc.KEY.right:
+			this.key = e;
+			break;
+		}
+	    	    
+	    this.startTouchSchedule();
+	},
+	
+	onKeyUp:function(e)
+	{
+		
 	},
 	/*
 	void GameScene.registerWithTouchDispatcher()

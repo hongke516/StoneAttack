@@ -8,7 +8,7 @@ var MeteorMaker = cc.Class.extend({
 	_currentCoolTime: 0,
 
 	update: function() {
-		this.isRightDirection = Math.floor(Math.random() * 100 % 5) == 0 ? !this.isRightDirection : this.isRightDirection;
+		this.isRightDirection = Math.floor(Math.random() * 5) == 0 ? !this.isRightDirection : this.isRightDirection;
 
 		this.currentX += this.isRightDirection ? 10 : -10;
 		this.currentX += this.currentX >= 360 ? -360 : ( this.currentX < 0 ? 360 : 0 );
