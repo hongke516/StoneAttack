@@ -5,14 +5,8 @@ var RatingLayer = cc.Layer.extend
     init:function ()
     {
         var selfPointer = this;
-        //////////////////////////////
-        // 1. super init first
         this._super();
-
-        /////////////////////////////
-        // 2. add a menu item with "X" image, which is clicked to quit the program
-        //    you may modify it.
-        // ask director the window size
+        
         var size = cc.Director.getInstance().getWinSize();
 
 		var layerColor = cc.LayerColor.create();
@@ -27,7 +21,6 @@ var RatingLayer = cc.Layer.extend
 		var spriteRating = cc.Sprite.create("res/All_Rating_300.png");
 		spriteRating.setPosition(cc.p(832, 520));
 		spriteRating.setScale(0.5);
-//		spriteRating.setOpacity(50); // cc.FadeTo.create(0.01,0)
 		layerColor.addChild(spriteRating);
         this.setTouchEnabled(true);
         
@@ -46,36 +39,7 @@ var RatingLayer = cc.Layer.extend
     {
 		var scene = cc.TransitionFade.create(0.3, new MenuScene()); 		
 		cc.Director.getInstance().replaceScene(scene);
-    }/*,
-    
-    // a selector callback
-    menuCloseCallback:function (sender)
-    {
-        cc.Director.getInstance().end();
-    },
-    onTouchesBegan:function (touches, event)
-    {
-        this.isMouseDown = true;
-    },
-    onTouchesMoved:function (touches, event)
-    {
-        if (this.isMouseDown)
-        {
-            if (touches)
-            {
-                //this.circle.setPosition(cc.p(touches[0].getLocation().x, touches[0].getLocation().y));
-            }
-        }
-    },
-    onTouchesEnded:function (touches, event)
-    {
-        this.isMouseDown = false;
-    },
-    onTouchesCancelled:function (touches, event)
-    {
-        console.log("onTouchesCancelled");
     }
-    */
 });
 
 var RatingScene = cc.Scene.extend
