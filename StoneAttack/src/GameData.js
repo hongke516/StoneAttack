@@ -1,6 +1,7 @@
 (function() {
 	"use strict";
 
+	// 게임데이터를 담고있는 Object
 	var GameData =
 	{
 		// int
@@ -18,14 +19,12 @@
 			SavedVersion: 1
 		},
 		
-		// GameScene
-		
 		playerX: 0,
 		gameScene: null,
 		currentScore: 0,
 	};
 
-	// ADD CONSTANTS
+	// 상수
 	Object.defineProperties(GameData, {
 		'STATE_PLAYING':
 		{
@@ -111,10 +110,12 @@
 
 	Object.defineProperty(GameData, 'SCORE_VERSION', { value : 1, writable: false });
 
+	// 초기값 설정 및 테이블 초기화
 	GameData.gameState = GameData.STATE_INTRO;
 	GameData.cosTable = [];
 	GameData.sinTable = [];
 	
+	// sinTable, cosTable 입력 -> 이 방식이 느리긴 한데 중석이가 이방식을 좋아함.
 	for(var i = 0; i < 360; i++)
 	{
 		var radian = i * Math.PI / 180.0;
@@ -122,6 +123,7 @@
 		GameData.sinTable.push(Math.sin(radian));
 	}	
 	
+	// 즉시실행 익명함수로 실행되기 때문에 외부에서 호출해주기 위해 window 최상위 객체에 바인딩한다.
 	window.GameData = GameData;
 	window.ccp = cc.p;
 })();
