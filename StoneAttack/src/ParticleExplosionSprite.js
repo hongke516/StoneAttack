@@ -40,6 +40,5 @@ var ParticleExplosionSprite = {
 
 		this.items[i].sprite.setVisible(true);
 		this.items[i].sprite.setOpacity(this.items[i].opacityTime);
-		// this.schedule(this.updatePoint);
 	}
 };
