@@ -28,7 +28,7 @@ var GameLayer = cc.Layer.extend
     isHighestScore:false,
 
 	arrayMeteorites:[],
-	arrayMeteorMaker:[],
+	// arrayMeteorMaker:[],
 
 	sprCharacter:null, // CCSprite
 	sprPlanet:null, // CCSprite			
@@ -197,7 +197,7 @@ var GameLayer = cc.Layer.extend
 	*/
 	makeMeteor:function(x)
 	{////
-	    var buf = MeteorSprite.create(x);
+	    // var buf = MeteorSprite.create(x);
 //		var buf = new MeteorSprite();
 		// buf.construct(x);
 		// var randNum = Math.floor(Math.random() * 4);
@@ -216,16 +216,19 @@ var GameLayer = cc.Layer.extend
 				// buf.initWithFile(s_metheo4_png);
 				// break;
 		// }
-		
-	    this.addChild(buf.sprite, 6);
-	    this.arrayMeteorites.push(buf);
+		MeteorSprite.create(x);
+		this.addChild(MeteorSprite.items[MeteorSprite.items.length-1].sprite, 6);
+	    // this.addChild(buf.sprite, 6);
+//	    this.arrayMeteorites.push(buf);
 	},
 	
 	makeMeteorItemHp:function()
 	{
-	    var buf = MeteorSprite.createHp();
-	    this.addChild(buf, 6);
-	    this.arrayMeteorites.push(buf);
+		MeteorSprite.createHp();
+		this.addChild(MeteorSprite.items[MeteorSprite.items.length-1].sprite, 6);		
+	    // var buf = MeteorSprite.createHp();
+	    // this.addChild(buf, 6);
+	    // this.arrayMeteorites.push(buf);
 	},
 	
 	makeMeteorItemShield:function()
@@ -233,9 +236,11 @@ var GameLayer = cc.Layer.extend
 	    var randNum = Math.floor(Math.random() * 180) + GameData.playerX;
 	    
 	    var rangeX = this.randNum >= 360 ? this.randNum - 360 : this.randNum;
-	    var buf = MeteorSprite.createShield(rangeX);
-	    this.addChild(buf, 6);
-	    this.arrayMeteorites.push(buf);
+		MeteorSprite.createShield(rangeX);
+		this.addChild(MeteorSprite.items[MeteorSprite.items.length-1].sprite, 6);	    
+	    // var buf = MeteorSprite.createShield(rangeX);
+	    // this.addChild(buf, 6);
+	    // this.arrayMeteorites.push(buf);
 	},
 	
 	makeMeteorMaker:function()
@@ -249,8 +254,8 @@ var GameLayer = cc.Layer.extend
 	collidePlanet:function(meteor)
 	{
 	    var dx = meteor.meteoX;
-	    var x = GameData.planetCenterX + MeteorSprite.cosTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
-	    var y = GameData.planetCenterY + MeteorSprite.sinTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
+	    var x = GameData.planetCenterX + GameData.cosTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
+	    var y = GameData.planetCenterY + GameData.sinTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
 	    this.makeRotationParticle(ccp(x, y));
 	    
 	    //    int dropSpeed = meteor.dropSpeed;
@@ -768,12 +773,15 @@ var GameLayer = cc.Layer.extend
 	    for(var i=0; i<this.arrayMeteorMaker.length; i++)
 	    {
 	    	this.arrayMeteorMaker[i].update();
+	    	cc.log("메이커 : " + this.arrayMeteorMaker.length);
 	    }	
-	        	    
+	    MeteorSprite.update();
+	    /*    	    
 	    for(var i=0; i<this.arrayMeteorites.length; i++)
 	    {
 	    	this.arrayMeteorites[i].update();
-	    }	    	    
+	    }
+	    */	    	    
 	},
 	
 	updateShield:function()

@@ -13,7 +13,9 @@ var MeteorSprite = {
 			isHp: false,
 
 			dropSpeed: Math.floor(Math.random() * (this.maxDropSpeed - this.minDropSpeed)) + this.minDropSpeed,
-			MeteorX: x ? x : Math.floor(Math.random() * 360),
+			MeteorX: x,
+			MeteorY: 680,
+			// MeteorX: x ? x : Math.floor(Math.random() * 360),
 			sprite: null
 		};
 
@@ -27,6 +29,7 @@ var MeteorSprite = {
 	},
 
 	createShield: function(x) {
+		cc.log("shield");
 		var obj = {
 			currentAngle: 0,
 			isShield: true,
@@ -34,6 +37,7 @@ var MeteorSprite = {
 
 			dropSpeed: 4,
 			MeteorX: x ? x : Math.floor(Math.random() * 360),
+			MeteorY: 680,
 			sprite: null
 		};
 
@@ -46,6 +50,7 @@ var MeteorSprite = {
 	},
 
 	createHp: function(x) {
+		cc.log("hp");
 		var obj = {
 			currentAngle: 0,
 			isShield: false,
@@ -53,6 +58,7 @@ var MeteorSprite = {
 
 			dropSpeed: 4,
 			MeteorX: x ? x : Math.floor(Math.random() * 360),
+			MeteorY: 680,
 			sprite: null
 		};
 
@@ -72,10 +78,12 @@ var MeteorSprite = {
 
 			this.items[i].sprite.setRotation(this.items[i].currentAngle);
 
-			this.items[i].MeteorY += this.items[i].dropSpeed;
-			var dx = this.items[i].MeteorX - GameData.playerX,
-			x  = GameData.planetCenterX + Math.cos(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.items[i].MeteorY,
-			y  = GameData.planetCenterY + Math.sin(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.items[i].MeteorY;
+			this.items[i].MeteorY -= this.items[i].dropSpeed;
+			var dx = this.items[i].MeteorX - GameData.playerX;
+			var x  = GameData.planetCenterX + Math.cos(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.items[i].MeteorY;
+			var y  = GameData.planetCenterY + Math.sin(Math.PI / 180 * (dx < 0 ? dx + 360 : dx)) * this.items[i].MeteorY;
+
+			console.debug(x, y);
 
 			this.items[i].sprite.setPosition(cc.p(x, y));
 			if(this.items[i].MeteorY < 163) {
