@@ -1,10 +1,6 @@
 (function() {
 	"use strict";
 
-	// var js = document.createElement('script'); js.type = 'text/javascript'; js.async = true;
-	// js.src = 'soundManager2/js/soundmanager2.js';
-	// var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(js, s);
-
 	var SoundControl = {
 		SoundList: [
 			s_BGM1_fast_mp3,
