@@ -62,6 +62,7 @@ var GameLayer = cc.Layer.extend
 	////
 	key:null,
 	lastMeteor:null,
+	isShift:false,
 	
 //array.splice(2,1) array.length, array.push, array[0]
     init:function ()
@@ -104,8 +105,7 @@ var GameLayer = cc.Layer.extend
 	        MeteorSprite.maxDropSpeed = 4;
 	    }
 	    
-	    this.startGame();		
-		this.startShield();
+	    this.startGame();	
 		
 		this.setKeyboardEnabled(true);
         this.setTouchEnabled(true);
@@ -538,6 +538,7 @@ var GameLayer = cc.Layer.extend
 	clickBtnOption:function()
 	{
 	    this.startSoundEffect(s_pong_mp3);
+	    this.pauseAllBackgroundMusic();
 	
 	    this.layerOptionBox.setVisible(true);
 	    this.menuStatePause.setVisible(false);
@@ -602,13 +603,14 @@ var GameLayer = cc.Layer.extend
 	    //    sprBtnSettingSelected.setVisible(false);
 	    this.menuBtnSetting.setVisible(true);
 	    
-	    if(this.bgmSettingChanged)
-	    {
-	    	this.stopAllBackgroundMusic();
+	    this.stopAllBackgroundMusic();
+	    // if(this.bgmSettingChanged)
+	    // {
+	    	// this.stopAllBackgroundMusic();
 	    	////
 	        // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
 	        // instance.stopBackgroundMusic();
-	    }
+	    // }
 	},
 	
 	clickOptionBgmLeft:function()
@@ -1060,13 +1062,41 @@ var GameLayer = cc.Layer.extend
 
 	pauseAllBackgroundMusic:function()
 	{
-    	SoundControl.Sound[s_BGM1_normal_mp3].pause();
-    	SoundControl.Sound[s_BGM1_fast_mp3].pause();
-    	SoundControl.Sound[s_BGM2_normal_mp3].pause();
-    	SoundControl.Sound[s_BGM2_fast_mp3].pause();
-    	SoundControl.Sound[s_BGM3_normal_mp3].pause();
-    	SoundControl.Sound[s_BGM3_fast_mp3].pause();
-    	SoundControl.Sound[s_BGM4_fast_mp3].pause();	   		
+    	// SoundControl.Sound[s_BGM1_normal_mp3].pause();
+    	// SoundControl.Sound[s_BGM1_fast_mp3].pause();
+    	// SoundControl.Sound[s_BGM2_normal_mp3].pause();
+    	// SoundControl.Sound[s_BGM2_fast_mp3].pause();
+    	// SoundControl.Sound[s_BGM3_normal_mp3].pause();
+    	// SoundControl.Sound[s_BGM3_fast_mp3].pause();
+    	// SoundControl.Sound[s_BGM4_fast_mp3].pause();	   	
+		if(!GameData.isMusicSound)
+		{
+			return;
+		}
+		switch(GameData.currentBgmNumber)
+		{
+			case 1:
+				SoundControl.Sound[s_BGM1_normal_mp3].pause();
+				break;
+			case 2:
+				SoundControl.Sound[s_BGM2_normal_mp3].pause();
+				break;
+			case 3:
+				SoundControl.Sound[s_BGM3_normal_mp3].pause();
+				break;
+			case 4:
+				SoundControl.Sound[s_BGM4_fast_mp3].pause();
+				break;
+			case 5:
+				SoundControl.Sound[s_BGM1_fast_mp3].pause();
+				break;
+			case 6:
+				SoundControl.Sound[s_BGM2_fast_mp3].pause();
+				break;
+			case 7:
+				SoundControl.Sound[s_BGM3_fast_mp3].pause();
+				break;
+		}    		
 	},
 	
 	resumeBackgroundMusic:function()
@@ -1108,14 +1138,14 @@ var GameLayer = cc.Layer.extend
     		SoundControl.Sound[fileName].play();
     	}
    },
-   
+   /*
 	stopAllSoundEffect:function()
 	{
     	SoundControl.Sound[s_pong_mp3].stop();
     	SoundControl.Sound[s_itemgot_mp3].stop();
     	SoundControl.Sound[s_puck_mp3].stop();
 	},   
-	
+	*/
 	gamePause:function()
 	{
 	    if(!GameData.gameScene)
@@ -1131,9 +1161,11 @@ var GameLayer = cc.Layer.extend
 	    cc.Director.getInstance().pause();
 	    
 	    // cc.Director.getInstance().setAnimationInterval(1.0 / 60);
-	    
-	    this.pauseAllBackgroundMusic();
-	    
+	    this.stopAllBackgroundMusic();
+	    // if(GameData.isMusicSound)
+	    // {
+// //		    this.pauseAllBackgroundMusic();
+	    // }
 	    // if((CocosDenshion.SimpleAudioEngine.sharedEngine()).isBackgroundMusicPlaying())
 	    // {
 	        // (CocosDenshion.SimpleAudioEngine.sharedEngine()).pauseBackgroundMusic();
@@ -1174,16 +1206,17 @@ var GameLayer = cc.Layer.extend
 	    
 	    if(GameData.isMusicSound)
 	    {
-	        if(this.bgmSettingChanged)
-	        {
-	            this.startBackgroundMusic();
-	            this.bgmSettingChanged = false;
-	        }
-	        else
-	        {
-	        	this.resumeBackgroundMusic();
-//	            (CocosDenshion.SimpleAudioEngine.sharedEngine()).resumeBackgroundMusic();
-	        }
+	    	this.startBackgroundMusic();
+	        // if(this.bgmSettingChanged)
+	        // {
+	            // this.startBackgroundMusic();
+	            // this.bgmSettingChanged = false;
+	        // }
+	        // else
+	        // {
+// //	        	this.resumeBackgroundMusic();
+// //	            (CocosDenshion.SimpleAudioEngine.sharedEngine()).resumeBackgroundMusic();
+	        // }
 	    }
 	    
 	    // this.sprLeftController.setVisible(true);
@@ -1261,33 +1294,56 @@ var GameLayer = cc.Layer.extend
 	    switch(e)
 		{
 			case cc.KEY.escape:
-			break;
-			
-			case cc.KEY.space:
-			case cc.KEY.enter:
-			break;
+				if(GameData.gameState == GameData.STATE_PAUSE)
+				{
+					this.clickBtnResume();
+				}
+				else
+				{
+					this.clickBtnPause();					
+				}		
+				break;
 			
 			case cc.KEY.shift:
-			if(this.runMode == 1 || this.runMode == -1)
-			{
-				this.runMode *= 2;
-			}
-			break;
-			
+				this.isShift = true;
+				if(this.runMode == 1 || this.runMode == -1)
+				{
+					this.runMode *= 2;
+				}
+				break;
+							
 			case cc.KEY.left:
-			this.key = e;
-			break;
+				this.key = e;
+				this.runMode = (/*this.runMode == 2 || this.runMode == -2*/this.isShift) ? 2 : 1;
+				this.startTouchSchedule();
+				break;
 			case cc.KEY.right:
-			this.key = e;
-			break;
+				this.key = e;
+				this.runMode = (/*this.runMode == 2 || this.runMode == -2*/this.isShift) ? -2 : -1;
+				this.startTouchSchedule();
+				break;
 		}
 	    	    
-	    this.startTouchSchedule();
+	    // this.startTouchSchedule();
 	},
 	
 	onKeyUp:function(e)
 	{
-		
+		if(e == this.key)
+		{
+			this.runMode = 0;
+			this.stopTouchSchedule();	
+		}
+		else if(e == cc.KEY.shift)
+		{
+			this.isShift = false;
+			
+			if(/*this.isShift && (*/this.runMode == 2 || this.runMode == -2/*)*/)
+			{
+				this.runMode /= 2;
+//				this.isShift = false;
+			}
+		}
 	},
 	/*
 	void GameScene.registerWithTouchDispatcher()
