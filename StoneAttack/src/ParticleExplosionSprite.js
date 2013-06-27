@@ -14,8 +14,6 @@ var ParticleExplosionSprite = {
 		var sprite = cc.Sprite.create(fileName);
 		sprite.setPosition(point);
 		sprite.setRotation(obj.currentAngle);
-		// sprite.setVisible(false);
-//		cc.log("aa " + sprite.getPositionX() + " " + sprite.getPositionY());
 		
 		if(fileName == s_shield_particle_png)
 		{
@@ -25,13 +23,11 @@ var ParticleExplosionSprite = {
 		obj.sprite = sprite;
 		this.items.push(obj);
 
-		this.start();		
-		// return this;
+		this.start();
 	},
 
 	updatePoint: function()
 	{
-		// cc.log(this.items.length);
 		if(GameData.gameState == GameData.STATE_PAUSE)
 		{
 			return;
@@ -41,14 +37,12 @@ var ParticleExplosionSprite = {
 			this.items[i].opacityTime -= this.items[i].deltaOpacity;
 			if(this.items[i].opacityTime <= 0)
 			{
-				this.items[i].sprite./*removeFromParentAndCleanup*/removeFromParent(true);
+				this.items[i].sprite.removeFromParent(true);
 				this.items[i] = null;
 				continue;
 			}
 
-			// this.items[i].sprite.setOpacity(this.items[i].opacityTime);
 			this.items[i].sprite.setPosition(cc.p(this.items[i].sprite.getPositionX() + this.items[i].vectorX,this.items[i].sprite.getPositionY() + this.items[i].vectorY));
-			// this.items[i].sprite.setPosition(cc.p(450, 300));
 			this.items[i].currentAngle += 5;
 			if(this.items[i].currentAngle >= 360)
 			{
@@ -67,7 +61,7 @@ var ParticleExplosionSprite = {
 	{
 		var i = this.items.length - 1;
 
-		// this.items[i].sprite.setVisible(true);
 		this.items[i].sprite.setOpacity(this.items[i].opacityTime);
+		i = 0;
 	}
 };
