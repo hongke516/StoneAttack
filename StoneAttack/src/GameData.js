@@ -24,14 +24,7 @@
 		gameScene: null,
 		currentScore: 0,
 	};
-/*	
-	var cosTable = [], sinTable = [];
-	for(var i = 0; i < 180; i++)
-	{
-		cosTable.push(Math.cos(i));
-		sinTable.push(Math.sin(i));
-	}
-*/
+	
 	// ADD CONSTANTS
 	Object.defineProperties(GameData, {
 		'STATE_PLAYING':
