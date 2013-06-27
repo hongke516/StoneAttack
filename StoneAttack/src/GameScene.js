@@ -550,6 +550,7 @@ var GameLayer = cc.Layer.extend
 	    this.startSoundEffect(s_pong_mp3);
 	    this.saveHighScore();
 	    this.startGame();
+	    this.makeMeteorMaker();
 	    this.gameResume();
 	    this.sprHighestScore.setVisible(false);
 	    this.labelScore.setColor(cc.c3b(255, 255, 255));

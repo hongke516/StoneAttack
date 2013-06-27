@@ -31,7 +31,7 @@
         COCOS2D_DEBUG: 2,
         box2d: false,
         chipmunk: false,
-        showFPS: true,
+        showFPS: false,
         frameRate: 60,
         loadExtension: false,
         renderMode: 0,
