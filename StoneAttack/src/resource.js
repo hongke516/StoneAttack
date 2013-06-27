@@ -81,6 +81,8 @@ var s_shieldcircledmg4_png = "res/shieldcircledmg4.png";
 
 var s_sound_effect_png = "res/sound_effect.png";
 var s_star_particle_png = "res/star_particle.png";
+var s_howtoplay_png = "res/howtoplay.png";
+
 // var s_vibration_png = "res/vibration.png";
 var s_x_png = "res/x.png";
 var s_xpushed_png = "res/xpushed.png";
@@ -190,6 +192,7 @@ var g_ressources = [
 	{src:s_bmfontCB_0_png},
 	{src:s_bmfontCB64_fnt},
 	{src:s_bmfontCB64_0_png},
+	{src:s_howtoplay_png},
     //tmx
 
     //bgm

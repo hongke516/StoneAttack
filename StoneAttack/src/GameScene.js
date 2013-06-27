@@ -36,6 +36,7 @@ var GameLayer = cc.Layer.extend
 	sprBackground:null,
 	sprHpBar:null,
 	sprHpFrame:null,
+	sprHowToPlay:null,
 	
 	layerParticle:null,
 	labelCombo:null,
@@ -105,6 +106,13 @@ var GameLayer = cc.Layer.extend
 	        MeteorSprite.maxDropSpeed = 4;
 	    }
 	    
+		this.sprHowToPlay = cc.Sprite.create(s_howtoplay_png);
+		this.sprHowToPlay.setPosition(cc.p(450, 300));
+		this.addChild(this.sprHowToPlay, 6);    
+		this.menuBtnPause.setVisible(false);
+		this.labelScore.setVisible(false);
+		this.labelScoreSpell.setVisible(false);
+	    
 	    this.startGame();	
 		
 		this.setKeyboardEnabled(true);
@@ -115,7 +123,7 @@ var GameLayer = cc.Layer.extend
 	startGame:function()
 	{
 	    this.removeMakerAndMeteorites();
-	    this.makeMeteorMaker();
+	    // this.makeMeteorMaker();
 	    
 	    this.stopShield();
 	    this.time = 0;
@@ -779,7 +787,7 @@ var GameLayer = cc.Layer.extend
 	
 	update:function()
 	{
-	    if(GameData.gameState != GameData.STATE_PLAYING)
+	    if(GameData.gameState != GameData.STATE_PLAYING || this.sprHowToPlay != null)
 	    {
 	        return;
 	    }
@@ -1283,6 +1291,18 @@ var GameLayer = cc.Layer.extend
 	
 	onKeyDown:function(e)
 	{
+		if(this.sprHowToPlay != null)
+		{
+		    this.makeMeteorMaker();			
+			this.removeChild(this.sprHowToPlay, true);
+			this.menuBtnPause.setVisible(true);
+			this.labelScore.setVisible(true);
+			this.labelScoreSpell.setVisible(true);
+			this.sprHowToPlay = null;
+			// this.startGame();
+			return;
+		}
+		
 	    if(GameData.gameState == GameData.STATE_GAMEOVER)
 	    {
 	        if(this.remainGameOverCoolTime == 0 && this.layerGameover.isVisible())
