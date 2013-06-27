@@ -15,7 +15,6 @@ var MeteorSprite = {
 			dropSpeed: Math.floor(Math.random() * (this.maxDropSpeed - this.minDropSpeed)) + this.minDropSpeed,
 			MeteorX: x,
 			MeteorY: 680,
-			// MeteorX: x ? x : Math.floor(Math.random() * 360),
 			sprite: null
 		};
 
@@ -26,7 +25,9 @@ var MeteorSprite = {
 		obj.sprite = sprite;
 
 		this.items.push(obj);
-//		return this;
+
+		randNum = null;
+		img = null;
 	},
 
 	createShield: function(x) {
@@ -47,6 +48,9 @@ var MeteorSprite = {
 		obj.sprite = sprite;
 
 		this.items.push(obj);
+
+		randNum = null;
+		img = null;
 	},
 
 	createHp: function(x) {
@@ -67,11 +71,13 @@ var MeteorSprite = {
 		obj.sprite = sprite;
 
 		this.items.push(obj);
+
+		randNum = null;
+		img = null;
 	},
 
 	update: function()
 	{
-		var remove_list = [];
 		for(var i = 0; i < this.items.length; i++)
 		{
 			this.items[i].currentAngle += 3;
@@ -119,6 +125,10 @@ var MeteorSprite = {
 					this.items[i] = null;
 				}
 			}
+
+			dx = null;
+			x = null;
+			y = null;
 		}
 		
 		this.items = this.items.filter(function(value) {
