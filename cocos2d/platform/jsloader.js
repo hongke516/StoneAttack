@@ -215,7 +215,7 @@
                 p = s / (que.length - 1);
                 //TODO: code for updating progress bar
                 
-                if(f.indexOf('SoundControl') > -1) {
+                if(que[s].indexOf('SoundControl') > -1) {
                     window.SoundControl.Load();
                 }
             }
