@@ -891,7 +891,7 @@ var MenuLayer = cc.Layer.extend
 	    
 	    /*
 	    CCSprite* sprOptionVibration = CCSprite::create("vibration.png");
-	    sprOptionVibration->setPosition(ccp(340, 145));
+	    sprOptionVibration->setPosition(cc.p(340, 145));
 	    sprOptionVibration->setScale(0.9f);
 	    layerOptionBox->addChild(sprOptionVibration);
 	    */
@@ -1021,7 +1021,7 @@ var MenuLayer = cc.Layer.extend
 	    this.addChild(this.sprBalloon);
 	    
 	    this.labelBalloon = cc.LabelTTF.create("", "나눔고딕", 30);
-	//    labelBalloon->setPosition(ccp(190, 315));
+	//    labelBalloon->setPosition(cc.p(190, 315));
 	    this.labelBalloon.setPosition(cc.p(140, 130));
 	    this.labelBalloon.setColor(cc.c3b(0, 0, 0));
 	    this.sprBalloon.addChild(this.labelBalloon);

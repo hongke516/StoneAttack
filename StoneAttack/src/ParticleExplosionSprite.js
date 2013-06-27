@@ -15,6 +15,12 @@ var ParticleExplosionSprite = {
 		sprite.setPosition(point);
 		sprite.setRotation(obj.currentAngle);
 		sprite.setVisible(false);
+		
+		obj.sprite = sprite;
+		this.items.push(obj);
+		
+		return obj.sprite;
+		this.start();
 	},
 
 	updatePoint: function() {

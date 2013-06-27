@@ -27,8 +27,8 @@ var GameLayer = cc.Layer.extend
     bgmSettingChanged:false,
     isHighestScore:false,
 
-	arrayMeteorites:[],
-	// arrayMeteorMaker:[],
+	// arrayMeteorites:[],
+	arrayMeteorMaker:[],
 
 	sprCharacter:null, // CCSprite
 	sprPlanet:null, // CCSprite			
@@ -61,6 +61,7 @@ var GameLayer = cc.Layer.extend
 	sprHighestScore:null,
 	
 	key:null,
+	lastMeteor:null,
 	
 //array.splice(2,1) array.length, array.push, array[0]
     init:function ()
@@ -141,7 +142,7 @@ var GameLayer = cc.Layer.extend
 	    this.layerColorFlash.setVisible(false);
 	    this.labelScore.setColor(cc.c3b(255, 255, 255));
 	    this.labelScoreSpell.setColor(cc.c3b(255, 255, 255));
-	    this.labelScore.setPosition(ccp(765, 570));
+	    this.labelScore.setPosition(cc.p(765, 570));
 	    this.labelScoreSpell.setString("Score");
 	    this.labelComboMul.setVisible(false);
 	    
@@ -175,17 +176,17 @@ var GameLayer = cc.Layer.extend
 	
 	makeShieldParticle:function(meteor)
 	{
-	    var tempParticle = ParticleExplosionSprite.createWithPoint(s_shield_particle_png, meteor.getPosition());
+	    var tempParticle = ParticleExplosionSprite.createWithPoint(s_shield_particle_png, meteor.sprite.getPosition());
 	    this.addChild(tempParticle, 5);
 	    tempParticle.setDeltaOpacity(10);
-	    tempParticle.start();
+	    // tempParticle.start();
 	},
 	
 	makeRotationParticle:function(position)
 	{
 	    var tempParticle = ParticleExplosionSprite.createWithPoint(s_star_particle_png, position);
 	    this.layerParticle.addChild(tempParticle);
-	    tempParticle.start();
+	    //tempParticle.start();
 	},
 	/*
 	makeMeteor:function()
@@ -218,6 +219,8 @@ var GameLayer = cc.Layer.extend
 		// }
 		MeteorSprite.create(x);
 		this.addChild(MeteorSprite.items[MeteorSprite.items.length-1].sprite, 6);
+		// var meteor = MeteorSprite.create(x);
+		// this.addChild(meteor.sprite, 6);
 	    // this.addChild(buf.sprite, 6);
 //	    this.arrayMeteorites.push(buf);
 	},
@@ -249,6 +252,7 @@ var GameLayer = cc.Layer.extend
 		var buf = new MeteorMaker();
 		buf.construct(Math.floor(Math.random() * 360));	    
 	    this.arrayMeteorMaker.push(buf);
+	    cc.log("메이커 : " + this.arrayMeteorMaker.length + "\n스코어 : " + this.realMeteorScore);
 	},
 
 	collidePlanet:function(meteor)
@@ -256,12 +260,12 @@ var GameLayer = cc.Layer.extend
 	    var dx = meteor.meteoX;
 	    var x = GameData.planetCenterX + GameData.cosTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
 	    var y = GameData.planetCenterY + GameData.sinTable[dx < 0 ? dx + 360 : dx] * meteor.meteoY;
-	    this.makeRotationParticle(ccp(x, y));
+	    this.makeRotationParticle(cc.p(x, y));
 	    
 	    //    int dropSpeed = meteor.dropSpeed;
 	    
-	    this.arrayMeteorites.removeObject(meteor);
-	    this.removeChild(meteor, true);
+	    // this.arrayMeteorites.removeObject(meteor);
+	    this.removeChild(meteor.sprite, true);
 	    
 	    if(meteor.isShield || meteor.isHp)
 	    {
@@ -270,18 +274,18 @@ var GameLayer = cc.Layer.extend
 	    
 	    this.realMeteorScore++;
 	    GameData.currentScore += this.deltaComboNum;
-	    labelScore.setString(currentScore + "");
+	    this.labelScore.setString(GameData.currentScore + "");
 	    
 	    if(this.realMeteorScore % 150 == 0)
 	    {
 	        this.makeMeteorItemHp();
 	    }
 	    
-	    if(!this.isHighestScore && GameData.currentScore > (GameData.isHardCore ? GameData.highestHardcoreScore : GameData.highestNormalScore))
+	    if(!this.isHighestScore && GameData.currentScore > (GameData.isHardCore ? GameData.HighScore.Hardcore : GameData.HighScore.Normal))
 	    {
 	        this.isHighestScore = true;
 	        this.labelScore.setColor(cc.c3b(255, 255, 80));
-	        this.labelScore.setPosition(ccp(733, 570));
+	        this.labelScore.setPosition(cc.p(733, 570));
 	        this.labelScoreSpell.setString("Highest");
 	        this.labelScoreSpell.setColor(cc.c3b(255, 255, 80));
 	    }
@@ -328,7 +332,7 @@ var GameLayer = cc.Layer.extend
 	    {
 	        this.layerCombo.setVisible(true);
 	    }
-	    this.labelComboNum.setString(currentCombo + "");
+	    this.labelComboNum.setString(this.currentCombo + "");
 	    
 	    this.startComboEffect();
 	},
@@ -348,11 +352,12 @@ var GameLayer = cc.Layer.extend
 	        this.saveHighScore();
 	        this.gameOver();
 	        this.schedule(this.updateGameOverCoolTime);
+	        this.lastMeteor = this;
 	        return;
 	    }
 	    ////
-	    this.removeChild(meteor, true);	    
-	    this.arrayMeteorites.splice(this.arrayMeteorites.indexOf(meteor), 1);
+	    this.removeChild(meteor.sprite, true);	    
+	    // this.arrayMeteorites.splice(this.arrayMeteorites.indexOf(meteor), 1);
 	    // this.removeChild(meteor, true);
 	    
 	    this.startFlash(255, 0, 0, 100);
@@ -382,8 +387,8 @@ var GameLayer = cc.Layer.extend
 	        this.currentHP = GameData.HP_MAX;
 	    }
 	    ////
-	    this.removeChild(meteor, true);	    
-	    this.arrayMeteorites.removeObject(arrayMeteorites.indexOf(meteor), 1);
+	    this.removeChild(meteor.sprite, true);	    
+	    // this.arrayMeteorites.removeObject(arrayMeteorites.indexOf(meteor), 1);
 //	    this.removeChild(meteor, true);
 	    this.startSoundEffect(s_itemgot_mp3);
 	},
@@ -394,9 +399,10 @@ var GameLayer = cc.Layer.extend
 	    this.makeShieldParticle(meteor);
 	    this.makeShieldParticle(meteor);
 	    
-	    this.arrayMeteorites.removeObject(arrayMeteorites.indexOf(meteor));
-	    this.removeChild(meteor, true);
-	    
+
+	    this.removeChild(meteor.sprite, true);
+	    // this.arrayMeteorites.removeObject(arrayMeteorites.indexOf(meteor));
+	    	    
 	    if(this.remainShieldCoolTime <= 0)
 	    {
 	        var scalePlus = cc.ScaleTo.create(0.1,  1.5);
@@ -437,16 +443,23 @@ var GameLayer = cc.Layer.extend
 	        arrayMeteorMaker.removeObjectAtIndex(i);
 	    }
 	    */
-        this.arrayMeteorMaker = [];
-        
-	    var count = this.arrayMeteorites.length;
+        this.arrayMeteorMaker = [];        
+	    // var count = this.arrayMeteorites.length;
+	    var count = MeteorSprite.items.length;
 	    for(var i = count-1; i >= 0; i--)
 	    {
-	        var buf = this.arrayMeteorites[i];
-	        this.removeChild(buf, true);
-	        this.arrayMeteorites.splice(i);
+	        // var buf = this.arrayMeteorites[i];
+	        var buf = MeteorSprite.items[i];
+	        this.removeChild(buf.sprite, true);
+	        // this.arrayMeteorites.splice(i);
 //	        this.removeChild(buf, true);
 	    }
+        MeteorSprite.items = [];
+        if(this.lastMeteor != null)
+        {
+        	this.removeChild(this.lastMeteor.sprite, true);
+        }    
+        this.lastMeteor = null;
 	},
 	
 	updateEnterHome:function()
@@ -694,7 +707,7 @@ var GameLayer = cc.Layer.extend
 	{
 	    if (this.realMeteorScore - this.preLevelScore >= this.preLevelUpNeed)
 	    {
-	        this.preLevelUpNeed += (arrayMeteorMaker.length < 11) ? this.preLevelUpNeed : 0;
+	        this.preLevelUpNeed += (this.arrayMeteorMaker.length < 11) ? this.preLevelUpNeed : 0;
 	        this.preLevelScore = this.realMeteorScore;
 	        this.makeMeteorMaker();
 	    }
@@ -773,7 +786,6 @@ var GameLayer = cc.Layer.extend
 	    for(var i=0; i<this.arrayMeteorMaker.length; i++)
 	    {
 	    	this.arrayMeteorMaker[i].update();
-	    	cc.log("메이커 : " + this.arrayMeteorMaker.length);
 	    }	
 	    MeteorSprite.update();
 	    /*    	    
@@ -835,7 +847,7 @@ var GameLayer = cc.Layer.extend
 	        this.unschedule(this.updateHitCoolTime);
 	        return;
 	    }
-	    this.sprCharacter.setVisible(remainHitCoolTime % 20 < 7 ? false : true);
+	    this.sprCharacter.setVisible(this.remainHitCoolTime % 20 < 7 ? false : true);
 	},
 	
 	updateFlash:function()
@@ -1233,7 +1245,7 @@ var GameLayer = cc.Layer.extend
 	    {
 	        if(this.remainGameOverCoolTime == 0 && this.layerGameover.isVisible())
 	        {
-	            this.startSoundEffect("pong.mp3");
+	            this.startSoundEffect(s_pong_mp3);
 	            this.enterHome();
 	        }
 	        return;
@@ -1290,7 +1302,7 @@ var GameLayer = cc.Layer.extend
 	    touchArray.addObject(pTouch);
 	    
 	    currentTouch = pTouch;
-	    CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(pTouch.getLocationInView());
+	    cc.point touchPoint = CCDirector.sharedDirector().convertToGL(pTouch.getLocationInView());
 	    setRunModeWithPoint(touchPoint.x, touchPoint.y);
 	    startTouchSchedule();
 	    touchCount++;
@@ -1301,7 +1313,7 @@ var GameLayer = cc.Layer.extend
 	{
 	    if(pTouch == currentTouch)
 	    {
-	        CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(pTouch.getLocationInView());
+	        cc.point touchPoint = CCDirector.sharedDirector().convertToGL(pTouch.getLocationInView());
 	        setRunModeWithPoint(touchPoint.x, touchPoint.y);
 	    }
 	}
@@ -1329,7 +1341,7 @@ var GameLayer = cc.Layer.extend
 	        if(isCurrentTouch)
 	        {
 	            currentTouch = (CCTouch*) touchArray.objectAtIndex(0);
-	            CCPoint touchPoint = CCDirector.sharedDirector().convertToGL(currentTouch.getLocationInView());
+	            cc.point touchPoint = CCDirector.sharedDirector().convertToGL(currentTouch.getLocationInView());
 	            setRunModeWithPoint(touchPoint.x, touchPoint.y);
 	        }
 	    }
@@ -1446,23 +1458,23 @@ var GameLayer = cc.Layer.extend
 	    if(this.currentHP <= 0)
 	    {
 	        this.labelScore.stopAllActions();
-	        this.labelScore.setAnchorPoint(ccp(0.5, 0.5));
-	        this.labelScore.setPosition(ccp(planetCenterX, planetCenterY));
+	        this.labelScore.setAnchorPoint(cc.p(0.5, 0.5));
+	        this.labelScore.setPosition(cc.p(GameData.planetCenterX, GameData.planetCenterY));
 	        this.labelScore.setScale(1.0);
 	        this.labelScoreSpell.setVisible(false);
 	        
 	        if(this.isHighestScore)
 	        {
-	            this.labelScore.setColor(ccc3(255, GameData.isHardCore ? 0 : 255, 0));
+	            this.labelScore.setColor(cc.c3b(255, GameData.isHardCore ? 0 : 255, 0));
 	        }
 	        else
 	        {
-	            this.sprHighestScore.setPosition(ccp(750, 160));
+	            this.sprHighestScore.setPosition(cc.p(750, 160));
 	            
-	            var buf = "" + GameData.isHardCore ? GameData.highestHardcoreScore : GameData.highestNormalScore;
+	            var buf = "" + GameData.isHardCore ? GameData.HighScore.Hardcore : GameData.HighScore.Normal;
 	            
 	            var labelHighest = cc.LabelBMFont.create(buf, s_bmfontCB64_fnt);
-	            labelHighest.setPosition(ccp(750, 100));
+	            labelHighest.setPosition(cc.p(750, 100));
 	            labelHighest.setColor(cc.c3b(255, GameData.isHardCore ? 0 : 255, 0));
 	            labelHighest.setScale(0.8);
 	            this.layerGameover.addChild(labelHighest);
@@ -1504,22 +1516,22 @@ var GameLayer = cc.Layer.extend
 	initSpriteStateBar:function()
 	{
 	    this.sprHpBar = cc.Sprite.create(s_gauge_png);
-	    this.sprHpBar.setPosition(ccp(420, GameData.planetCenterY + 115));
-	    this.sprHpBar.setAnchorPoint(ccp(0, 0));
+	    this.sprHpBar.setPosition(cc.p(420, GameData.planetCenterY + 115));
+	    this.sprHpBar.setAnchorPoint(cc.p(0, 0));
 	    this.sprHpBar.setScale(0.33);
 	    this.sprHpBar.setVisible(false);
 	    this.addChild(this.sprHpBar, 8);
 	    
 	    this.sprHpFrame = cc.Sprite.create(s_gaugebar_png);
-	    this.sprHpFrame.setPosition(ccp(395, GameData.planetCenterY + 115));
-	    this.sprHpFrame.setAnchorPoint(ccp(0, 0));
+	    this.sprHpFrame.setPosition(cc.p(395, GameData.planetCenterY + 115));
+	    this.sprHpFrame.setAnchorPoint(cc.p(0, 0));
 	    this.sprHpFrame.setScale(0.33);
 	    this.sprHpFrame.setVisible(false);
 	    this.addChild(this.sprHpFrame, 8);
 	    /*
 	     sprMpBar = CCSprite.create("MpGauge.png");
-	     sprMpBar.setPosition(ccp(500, 320));
-	     sprMpBar.setAnchorPoint(ccp(0, 0));
+	     sprMpBar.setPosition(cc.p(500, 320));
+	     sprMpBar.setAnchorPoint(cc.p(0, 0));
 	     this.addChild(sprMpBar);
 	     */
 	    var barSize = this.sprHpBar.getContentSize();
@@ -1532,17 +1544,17 @@ var GameLayer = cc.Layer.extend
 	    this.layerCombo = cc.Layer.create();
 	    
 	    this.labelCombo = cc.LabelBMFont.create("Combo", s_bmfontCB64_fnt);
-	    this.labelCombo.setPosition(ccp(GameData.planetCenterX, GameData.planetCenterY + 75));
+	    this.labelCombo.setPosition(cc.p(GameData.planetCenterX, GameData.planetCenterY + 75));
 	    this.labelCombo.setColor(cc.c3b(255, 255, 0));
 	    this.layerCombo.addChild(this.labelCombo);
 	    
 	    this.labelComboNum = cc.LabelBMFont.create("", s_bmfontCB64_fnt);
-	    this.labelComboNum.setPosition(ccp(GameData.planetCenterX, GameData.planetCenterY));
+	    this.labelComboNum.setPosition(cc.p(GameData.planetCenterX, GameData.planetCenterY));
 	    this.labelComboNum.setColor(cc.c3b(255, 255, 0));
 	    this.layerCombo.addChild(this.labelComboNum);
 	    
 	    this.labelComboMul = cc.LabelBMFont.create("", s_bmfontCB64_fnt);
-	    this.labelComboMul.setPosition(ccp(843, 520));
+	    this.labelComboMul.setPosition(cc.p(843, 520));
 	    this.labelComboMul.setVisible(false);
 	    
 	    this.layerCombo.addChild(this.labelComboMul);
@@ -1551,24 +1563,24 @@ var GameLayer = cc.Layer.extend
 	    this.addChild(this.layerCombo, 8);	    
 	    
 	    this.labelScore = cc.LabelBMFont.create("0", s_bmfontCB64_fnt);
-	    this.labelScore.setPosition(ccp(765, 570));
+	    this.labelScore.setPosition(cc.p(765, 570));
 	    this.labelScore.setColor(cc.c3b(255, 255, 255));
 	    this.labelScore.setScale(0.7);
-	    this.labelScore.setAnchorPoint(ccp(1.0, 0.5));
+	    this.labelScore.setAnchorPoint(cc.p(1.0, 0.5));
 	    this.addChild(this.labelScore, 8);
 	    
 	    this.labelScoreSpell = cc.LabelBMFont.create("Score", s_bmfontCB64_fnt);
-	    this.labelScoreSpell.setPosition(ccp(880, 565));
+	    this.labelScoreSpell.setPosition(cc.p(880, 565));
 	    this.labelScoreSpell.setColor(cc.c3b(255, 255, 255));
 	    this.labelScoreSpell.setScale(0.55);
-	    this.labelScoreSpell.setAnchorPoint(ccp(1.0, 0.5));
+	    this.labelScoreSpell.setAnchorPoint(cc.p(1.0, 0.5));
 	    this.addChild(this.labelScoreSpell, 8);
 	},
 	
 	initLayerParticle:function()
 	{
 	    this.layerParticle = cc.Layer.create();
-	    this.layerParticle.setAnchorPoint(ccp(0.5, 1.0 / 600 * GameData.planetCenterY));
+	    this.layerParticle.setAnchorPoint(cc.p(0.5, 1.0 / 600 * GameData.planetCenterY));
 	    this.layerParticle.setRotation(GameData.playerX);
 	    this.addChild(this.layerParticle, 5);
 	},
@@ -1587,7 +1599,7 @@ var GameLayer = cc.Layer.extend
 	    
 	    this.menuBtnPause = cc.Menu.create(this.menuItemPause, null);
 	    
-	    this.menuBtnPause.setPosition(ccp(70, 530));
+	    this.menuBtnPause.setPosition(cc.p(70, 530));
 	    this.addChild(this.menuBtnPause, 10);
 	},
 	
@@ -1605,15 +1617,15 @@ var GameLayer = cc.Layer.extend
 	    var menuItemSetting = cc.MenuItemImage.create(s_setting_png, s_setting_pressed_png, this.clickBtnOption, this);
 	    menuItemSetting.setScale(0.8);
 	    this.menuBtnSetting = cc.Menu.create(menuItemSetting, null);
-	    this.menuBtnSetting.setPosition(ccp(830, 530));
+	    this.menuBtnSetting.setPosition(cc.p(830, 530));
 	    	    
 	    this.menuStatePause = cc.Menu.create(menuItemResume, menuItemRestart, menuItemExit, null);
 	    this.menuStatePause.alignItemsVerticallyWithPadding(7);
-	    this.menuStatePause.setPosition(ccp(0, 0));
-	    this.menuStatePause.setPosition(ccp(450, 155));
+	    this.menuStatePause.setPosition(cc.p(0, 0));
+	    this.menuStatePause.setPosition(cc.p(450, 155));
 	    
 	    this.sprPauseLabel = cc.Sprite.create(s_pause_png);
-	    this.sprPauseLabel.setPosition(ccp(450, 400));
+	    this.sprPauseLabel.setPosition(cc.p(450, 400));
 	    this.sprPauseLabel.setScale(0.9);
 	    
 	    this.layerPauseMenu = cc.LayerColor.create(cc.c3b(0, 0, 0));
@@ -1630,7 +1642,7 @@ var GameLayer = cc.Layer.extend
 	{
 	    this.remainShieldCoolTimeMax = 360;	    
 	    this.sprShield = cc.Sprite.create(s_shieldcircle_png);
-	    this.sprShield.setPosition(ccp(GameData.shieldX, GameData.shieldY));
+	    this.sprShield.setPosition(cc.p(GameData.shieldX, GameData.shieldY));
 	    this.sprShield.setOpacity(195);
 	    this.sprShield.setScale(0);
 	    this.addChild(this.sprShield, 5);
@@ -1717,7 +1729,7 @@ var GameLayer = cc.Layer.extend
 	    
 	    /*
 	    CCSprite* sprOptionVibration = CCSprite.create("vibration.png");
-	    sprOptionVibration.setPosition(ccp(340, 145));
+	    sprOptionVibration.setPosition(cc.p(340, 145));
 	    sprOptionVibration.setScale(0.9f);
 	    layerOptionBox.addChild(sprOptionVibration);
 	    */
@@ -1805,7 +1817,7 @@ var GameLayer = cc.Layer.extend
 	    this.layerGameover = cc.Layer.create();
 	    
 	    var sprGameover = cc.Sprite.create(s_gameover_png);
-	    sprGameover.setPosition(ccp(450, 355));
+	    sprGameover.setPosition(cc.p(450, 355));
 	    sprGameover.setScale(1.2);
 	    this.layerGameover.addChild(sprGameover);
 	    this.layerGameover.setVisible(false);
@@ -1827,7 +1839,7 @@ var GameLayer = cc.Layer.extend
 	    this.currentCombo = 0;
 	    
 	    this.sprHighestScore = cc.Sprite.create(GameData.isHardCore ? s_highscore_hard_png : s_highscore_png);
-	    this.sprHighestScore.setPosition(ccp(450, 170));
+	    this.sprHighestScore.setPosition(cc.p(450, 170));
 	    this.sprHighestScore.setScale(0.45);
 	    this.sprHighestScore.setVisible(false);
 	    this.addChild(this.sprHighestScore, 9);
