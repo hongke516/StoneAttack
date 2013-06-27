@@ -37,48 +37,6 @@
 					}
 				}
 			});
-		},
-
-		Play: function(soundName) {
-			if(!this.Sound.hasOwnProperty(soundName)) {
-				console.warn('soundFile', soundName, 'not found.');
-				return;
-			}
-
-			if(this.Sound[soundName].playState != 0) {
-				console.warn('soundFile', soundName, 'is playing.');
-				return;
-			}
-
-			this.Sound[soundName].play();
-		},
-
-		Pause: function(soundName) {
-			if(!this.Sound.hasOwnProperty(soundName)) {
-				console.warn('soundFile', soundName, 'not found.');
-				return;
-			}
-
-			if(this.Sound[soundName].playState != 1) {
-				console.warn('soundFile', soundName, 'is not playing.');
-				return;
-			}
-
-			this.Sound[soundName].pause();
-		},
-
-		Stop: function(soundName) {
-			if(!this.Sound.hasOwnProperty(soundName)) {
-				console.warn('soundFile', soundName, 'not found.');
-				return;
-			}
-
-			if(this.Sound[soundName].playState != 1) {
-				console.warn('soundFile', soundName, 'is not playing.');
-				return;
-			}
-
-			this.Sound[soundName].stop();
 		}
 	};
 
