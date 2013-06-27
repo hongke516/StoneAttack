@@ -45,7 +45,6 @@ var MenuLayer = cc.Layer.extend
         // 1. super init first
         this._super();
 
-		// FileIO::sharedInstance()->readFile();
 		if(GameData.gameState == GameData.STATE_INTRO)
 		{
 			this.schedule(this.startBackgroundMusic, 0, false, 0.3);
@@ -61,7 +60,6 @@ var MenuLayer = cc.Layer.extend
 			this.currentAngle = 0;
 		}
 		
-		// MeteorSprite::initSinCosTable();
 		this.initSpriteBackground();
 		this.initSpriteCharacter();
 		this.initSpritePlanet();
@@ -100,6 +98,8 @@ var MenuLayer = cc.Layer.extend
     {
     	var win = window.open('http://facebook.com/StoneAttack', 'facebook_stoneattack');
     	win.focus();
+
+    	win = null;
     },
     
     clickRecord:function()
@@ -145,9 +145,6 @@ var MenuLayer = cc.Layer.extend
 	    {
 	        this.layerBgmChoice.setVisible(false);
 	        this.stopAllBackgroundMusic();
-	        // cc.AudioEngine.getInstance().stopMusic();
-	        // CocosDenshion::SimpleAudioEngine* instance = CocosDenshion::SimpleAudioEngine::sharedEngine();
-	        // instance->stopBackgroundMusic();
 	    }    	
     },
     
@@ -170,9 +167,6 @@ var MenuLayer = cc.Layer.extend
 	    this.menuBtnSetting.setVisible(true);
 	    
 	    this.stopAllBackgroundMusic();
-	    // CocosDenshion::SimpleAudioEngine* instance = CocosDenshion::SimpleAudioEngine::sharedEngine();
-	    // instance->stopBackgroundMusic();
-	    // cc.AudioEngine.getInstance().stopMusic();
 	
 	    if(GameData.gameState != GameData.STATE_RECORD)
 	    {
@@ -279,7 +273,7 @@ var MenuLayer = cc.Layer.extend
 	    this.saveFile();		
 	},
 	
-	enableMenu/*True*/:function(bool)
+	enableMenu:function(bool)
 	{
 		this.menu1.setEnabled(bool);
 		this.menu2.setEnabled(bool);
@@ -287,12 +281,7 @@ var MenuLayer = cc.Layer.extend
 		this.menu4.setEnabled(bool);
 		this.menuBtnSetting.setEnabled(bool);
 	},
-	/*
-	enableMenuFalse:function()
-	{
-		
-	},
-	*/
+
 	leftGesture:function()
 	{
 	    this.currentAngle -= 5;
@@ -329,6 +318,8 @@ var MenuLayer = cc.Layer.extend
 	    this.menu2.setPosition(cc.p(450 + 300 * GameData.cosTable[angle], 100 + 300 * GameData.sinTable[angle]));
 	    this.menu3.setPosition(cc.p(450 + 300 * GameData.cosTable[180 + angle >= 360 ? -180 + angle : 180 + angle], 100 + 300 * GameData.sinTable[180 + angle >= 360 ? -180 + angle : 180 + angle]));
 	    this.menu4.setPosition(cc.p(450 + 300 * GameData.cosTable[270 + angle >= 360 ? -90 + angle : 270 + angle], 100 + 300 * GameData.sinTable[270 + angle >= 360 ? -90 + angle : 270 + angle]));		
+	
+	    angle = null;
 	},
 	
 	rightGesture:function()
@@ -365,6 +356,8 @@ var MenuLayer = cc.Layer.extend
 	    this.menu2.setPosition(cc.p(450 + 300 * GameData.cosTable[angle], 100 + 300 * GameData.sinTable[angle]));
 	    this.menu3.setPosition(cc.p(450 + 300 * GameData.cosTable[180 + angle >= 360 ? -180 + angle : 180 + angle], 100 + 300 * GameData.sinTable[180 + angle >= 360 ? -180 + angle : 180 + angle]));
 	    this.menu4.setPosition(cc.p(450 + 300 * GameData.cosTable[270 + angle >= 360 ? -90 + angle : 270 + angle], 100 + 300 * GameData.sinTable[270 + angle >= 360 ? -90 + angle : 270 + angle]));		
+	
+		angle = null;
 	},
 	
 	updateLabelToStart:function()
@@ -448,7 +441,9 @@ var MenuLayer = cc.Layer.extend
 	            this.runReverse = true;
 	            break;
 	    }
-	    this.sprCharacter.setFlipX(this.runMode < 0);		
+	    this.sprCharacter.setFlipX(this.runMode < 0);
+
+	    absRunNum = null;
 	},
 	
     updateTitleAnimation:function()
@@ -464,8 +459,6 @@ var MenuLayer = cc.Layer.extend
 	        if(this.remainFrame == 0)
 	        {
 	        	this.stopAllBackgroundMusic();
-	        	// cc.AudioEngine.getInstance().stopMusic();
-//	            CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	            this.menu1.setOpacity(15);
 	            this.menu2.setOpacity(15);
 	           	this.menu3.setOpacity(15);
@@ -588,21 +581,7 @@ var MenuLayer = cc.Layer.extend
 	        {
 	            return;
 	        }
-	
-	        /*
-	        int x = (CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView())).x;
-	        if(x>450)
-	        {
-	            runMode = -2;
-	            this->schedule(schedule_selector(MenuScene::leftGesture));
-	        }
-	        else
-	        {
-	            runMode = 2;
-	            this->schedule(schedule_selector(MenuScene::rightGesture));
-	        }
-	        */
-	       
+
     		if(e != cc.KEY.left && e != cc.KEY.right && e != cc.KEY.space && e != cc.KEY.enter && e != cc.KEY.escape)
     		{
     			return;
@@ -656,35 +635,10 @@ var MenuLayer = cc.Layer.extend
 	    	}      
 		}
     },
-    
-    /*
-    onTouchesBegan:function (touches, event)
-    {
-        this.isMouseDown = true;
-    },
-    onTouchesMoved:function (touches, event)
-    {
-        if (this.isMouseDown)
-        {
-            if (touches)
-            {
-                //this.circle.setPosition(cc.p(touches[0].getLocation().x, touches[0].getLocation().y));
-            }
-        }
-    },
-    onTouchesEnded:function (touches, event)
-    {
-        this.isMouseDown = false;
-    },
-    onTouchesCancelled:function (touches, event)
-    {
-        console.log("onTouchesCancelled");
-    },
-    */
+
     initLabelTouchAnywhere:function()
     {
     	this.labelTouchAnywhereToStart = cc.LabelBMFont.create("PRESS ANY KEY TO START", s_bmfontCB_fnt);
-//		this.labelTouchAnywhereToStart = cc.LabelTTF.create('PRESS ANY KEY TO START', '나눔고딕', 32);
 		this.labelTouchAnywhereToStart.setPosition(cc.p(450, 50));
 		this.labelTouchAnywhereToStart.setColor(cc.c3b(255, 255, 255));
 		this.labelToStartPeriod = 0;
@@ -773,8 +727,6 @@ var MenuLayer = cc.Layer.extend
 	    this.menu4.setPosition(cc.p(450 + 300 * GameData.cosTable[270 + angle >= 360 ? -90 + angle : 270 + angle],
 	    	 100 + 300 * GameData.sinTable[270 + angle >= 360 ? -90 + angle : 270 + angle]));
 	    
-//	    this.labelVersion = cc.LabelBMFont.create(this.strVersion/*"ver 1.7"*/, "res/bmfontCB.fnt");;
-//		this.labelVersion = cc.LabelTTF.create(this.strVersion, '나눔고딕', 32);
 		this.labelVersion = cc.LabelBMFont.create(this.strVersion, s_bmfontCB_fnt);
 	    this.labelVersion.setPosition(cc.p(830, 570));
 	    this.labelVersion.setColor(cc.c3b(255, 255, 255));
@@ -808,7 +760,13 @@ var MenuLayer = cc.Layer.extend
 	    this.layerMenu.addChild(this.menu4);
 	    
 	    this.addChild(this.labelVersion);
-	    this.addChild(this.layerMenu);   	
+	    this.addChild(this.layerMenu); 
+
+	    menuItem1 = null;
+	    menuItem2 = null; 
+	    menuItem3 = null;
+	    menuItem4 = null;
+	    angle = null;
     },
     
     initOptionBox:function()
@@ -846,8 +804,8 @@ var MenuLayer = cc.Layer.extend
 	    
 	    menuItemBgmChoiceLeft.setScale(0.65);
 	    menuItemBgmChoiceRight.setScale(0.65);
-	    menuBgmChoiceLeft.setPosition(cc.p(320, /*255*/260));
-	    menuBgmChoiceRight.setPosition(cc.p(580, /*255*/263));
+	    menuBgmChoiceLeft.setPosition(cc.p(320, 260));
+	    menuBgmChoiceRight.setPosition(cc.p(580, 263));
 	    
 	    switch(GameData.currentBgmNumber)
 	    {
@@ -876,7 +834,7 @@ var MenuLayer = cc.Layer.extend
 	            this.sprBgmNumber = cc.Sprite.create(s_bgm3_fast_png);
 	            break;
 	    }
-	    this.sprBgmNumber.setPosition(cc.p(450, /*255*/260));
+	    this.sprBgmNumber.setPosition(cc.p(450, 260));
 	    this.sprBgmNumber.setScale(0.7);
 	    
 	    this.layerBgmChoice.addChild(menuBgmChoiceLeft);
@@ -885,23 +843,14 @@ var MenuLayer = cc.Layer.extend
 	    
 	    
 	    var sprOptionSE = cc.Sprite.create(s_sound_effect_png);
-	    sprOptionSE.setPosition(cc.p(340, /*255*/145));
+	    sprOptionSE.setPosition(cc.p(340, 145));
 	    sprOptionSE.setScale(0.9);
 	    this.layerOptionBox.addChild(sprOptionSE);
-	    
-	    /*
-	    CCSprite* sprOptionVibration = CCSprite::create("vibration.png");
-	    sprOptionVibration->setPosition(cc.p(340, 145));
-	    sprOptionVibration->setScale(0.9f);
-	    layerOptionBox->addChild(sprOptionVibration);
-	    */
 	   
 	    var btn1_1;
 	    var btn1_2;
 	    var btn2_1;
 	    var btn2_2;
-//	    var btn3_1;
-//	    var btn3_2;
 	    
 	    if(GameData.isMusicSound)
 	    {
@@ -925,34 +874,18 @@ var MenuLayer = cc.Layer.extend
 	        btn2_2 = cc.MenuItemImage.create(s_on_png, s_off_png);
 	        btn2_1 = cc.MenuItemImage.create(s_off_png, s_on_png);
 	    }
-	    
-	   /*
-	    if(GameData::isVibrate)
-	    {
-	        btn3_1 = CCMenuItemImage::create("on.png", "off.png");
-	        btn3_2 = CCMenuItemImage::create("off.png", "on.png");
-	    }
-	    else
-	    {
-	        btn3_2 = CCMenuItemImage::create("on.png", "off.png");
-	        btn3_1 = CCMenuItemImage::create("off.png", "on.png");
-	    }
-	    */
+
 	    btn1_1.setScale(0.5);
 	    btn1_2.setScale(0.5);
 	    btn2_1.setScale(0.5);
 	    btn2_2.setScale(0.5);
-	    // btn3_1.setScale(0.5);
-	    // btn3_2.setScale(0.5);
 	    
-	    var toggle1 = cc.MenuItemToggle.create(/*this, this.clickOptionMusic,*/ btn1_1, btn1_2, this.clickOptionMusic/*null*/, this);
-	    var toggle2 = cc.MenuItemToggle.create(/*this, this.clickOptionSE,*/ btn2_1, btn2_2, this.clickOptionSE/*null*/, this);
-// //	    var toggle3 = CCMenuItemToggle::createWithTarget(this, menu_selector(MenuScene::clickOptionVibrate), btn3_1, btn3_2, NULL);
+	    var toggle1 = cc.MenuItemToggle.create(btn1_1, btn1_2, this.clickOptionMusic, this);
+	    var toggle2 = cc.MenuItemToggle.create(btn2_1, btn2_2, this.clickOptionSE, this);
 
 	    
 	    var menuOptionSettingBGM = cc.Menu.create(toggle1, null);
 	    var menuOptionSettingSE = cc.Menu.create(toggle2, null);
-//	    var menuOptionSettingVibration =cc.Menu.create(toggle3, null);
 	    menuOptionSettingBGM.setPosition(cc.p(530, 380));
 	    menuOptionSettingSE.setPosition(cc.p(530, 150));
 	    
@@ -972,6 +905,26 @@ var MenuLayer = cc.Layer.extend
 	        this.menuBtnSetting.setEnabled(false);
 	    }
 	    this.addChild(this.menuBtnSetting);
+
+	    sprOptionBox = null;
+	    sprOptionTitle = null;
+	    menuItemOptionExit = null;
+	    menuOptionExit = null;
+	    sprOptionBGM = null;
+	    menuItemBgmChoiceLeft = null;
+	    menuItemBgmChoiceRight = null;
+	    menuBgmChoiceLeft = null;
+	    menuBgmChoiceRight = null;
+	    sprOptioSE = null;
+	    btn1_1 = null;
+	    btn1_2 = null;
+	    btn2_1 = null;
+	    btn2_2 = null;
+	    toggle1 = null;
+	    toggle2 = null;
+	    menuOptionSettingBGM = null;
+	    menuOptionSettingSE = null;
+	    menuItemSetting = null;
     },
     
     initRecord:function()
@@ -994,22 +947,24 @@ var MenuLayer = cc.Layer.extend
 	    this.layerRecord.addChild(sprNormalHighest);
 	    this.layerRecord.addChild(sprHardcordHighest);
 	    
-	    // char buf[] = {0};
-	    // sprintf(buf, "%d", GameData::highestNormalScore);
-	    
-	    var labelNormalScore = cc.LabelBMFont.create(/*buf*//*GameData.highestNormalScore*/"" + GameData.HighScore.Normal, s_bmfontCB64_fnt);
+	    var labelNormalScore = cc.LabelBMFont.create("" + GameData.HighScore.Normal, s_bmfontCB64_fnt);
 	    labelNormalScore.setPosition(cc.p(500, 120));
-	    labelNormalScore.setColor(cc.c3b(255, /*233*/255, 0));
+	    labelNormalScore.setColor(cc.c3b(255, 255, 0));
 	    this.layerRecord.addChild(labelNormalScore);
 
-//	    sprintf(buf, "%d", GameData::highestHardcoreScore);
-	    var labelHardcoreScore = cc.LabelBMFont.create(/*buf*//*GameData.highestHardcoreScore*/"" + GameData.HighScore.Hardcore, s_bmfontCB64_fnt);
+	    var labelHardcoreScore = cc.LabelBMFont.create("" + GameData.HighScore.Hardcore, s_bmfontCB64_fnt);
 	    labelHardcoreScore.setPosition(cc.p(750, 120));
-	    labelHardcoreScore.setColor(cc.c3b(255, /*25*/0, 0));
+	    labelHardcoreScore.setColor(cc.c3b(255, 0, 0));
 	    this.layerRecord.addChild(labelHardcoreScore);
 	    
 	    this.layerRecord.setVisible(false);
 	    this.addChild(this.layerRecord); 	
+
+	    sprRecord = null;
+	    sprNormalHighest = null;
+	    sprHardcordHighest = null;
+	    labelNormalScore = null;
+	    labelHardcoreScore = null;
     },
     
     initBalloon:function()
@@ -1021,7 +976,6 @@ var MenuLayer = cc.Layer.extend
 	    this.addChild(this.sprBalloon);
 	    
 	    this.labelBalloon = cc.LabelTTF.create("", "나눔고딕", 30);
-	//    labelBalloon->setPosition(cc.p(190, 315));
 	    this.labelBalloon.setPosition(cc.p(140, 130));
 	    this.labelBalloon.setColor(cc.c3b(0, 0, 0));
 	    this.sprBalloon.addChild(this.labelBalloon);
@@ -1039,7 +993,7 @@ var MenuLayer = cc.Layer.extend
     
     changeBalloonMessage:function()
     {
-	    switch(/*rand() % 7*/Math.floor(Math.random()*5))
+	    switch(Math.floor(Math.random()*5))
 	    {
 	        case 0:
 	        	this.labelBalloon.setString("안드로이드랑 iOS\n버전도 있어요 ㅎㅎ");
@@ -1051,13 +1005,7 @@ var MenuLayer = cc.Layer.extend
 	            }
 	            else
 	            {
-//	                this.changeBalloonMessage();
 	                this.labelBalloon.setString("합산 " + (GameData.HighScore.Normal + GameData.HighScore.Hardcore) + "점?\n실망이에요 ㅜ_ㅜ");
-	                /*
-	                char buf[256] = {0};
-	                sprintf(buf, "합산 %d점?\n실망이에요 ㅜ_ㅜ", GameData::highestHardcoreScore + GameData::highestNormalScore);
-	                labelBalloon->setString(buf);
-	                 */
 	            }
 	            break;
 	        case 2:
@@ -1083,21 +1031,14 @@ var MenuLayer = cc.Layer.extend
     
 	startBackgroundMusic:function()
 	{
-	    // CocosDenshion.SimpleAudioEngine* instance = CocosDenshion.SimpleAudioEngine.sharedEngine();
-	    // instance.stopBackgroundMusic();
-	    ////
-	    
 	    if(!GameData.isMusicSound)
 	    {
 	    	return;
 	    }
 	    
-//	    var instance = cc.AudioEngine.getInstance();
-	    
 	    if(GameData.gameState == GameData.STATE_INTRO)
 	    {
 	        SoundControl.Sound[s_BGM2_normal_mp3].play();
-			// instance.playMusic(s_BGM2_normal_mp3, true);
 	        return;
 	    }
 	    
@@ -1112,41 +1053,29 @@ var MenuLayer = cc.Layer.extend
         switch(bgmNumber)
         {
             case 1:
-  				SoundControl.Sound[s_BGM1_normal_mp3].play({loops:999});    
-  				// instance.playMusic(s_BGM1_normal_mp3, true);      
-                // instance.playBackgroundMusic("BGM1-normal.mp3", true);
+  				SoundControl.Sound[s_BGM1_normal_mp3].play({loops:999});
                 break;
             case 2:
             	SoundControl.Sound[s_BGM2_normal_mp3].play({loops:999});
-            	// instance.playMusic(s_BGM2_normal_mp3, true);
-                // instance.playBackgroundMusic("BGM2-normal.mp3", true);
                 break;
             case 3:
             	SoundControl.Sound[s_BGM3_normal_mp3].play({loops:999});
-            	// instance.playMusic(s_BGM3_normal_mp3, true);
-                // instance.playBackgroundMusic("BGM3-normal.mp3", true);
                 break;
             case 4:
 	            SoundControl.Sound[s_BGM4_fast_mp3].play({loops:999});
-	            // instance.playMusic(s_BGM4_fast_mp3, true);
-                // instance.playBackgroundMusic("BGM4-fast.mp3", true);
                 break;
             case 5:
             	SoundControl.Sound[s_BGM1_fast_mp3].play({loops:999});
-            	// instance.playMusic(s_BGM1_fast_mp3, true);
-                // instance.playBackgroundMusic("BGM1-fast.mp3", true);
                 break;
             case 6:
             	SoundControl.Sound[s_BGM2_fast_mp3].play({loops:999});
-            	// instance.playMusic(s_BGM2_fast_mp3, true);
-                // instance.playBackgroundMusic("BGM2-fast.mp3", true);
                 break;
             case 7:
             	SoundControl.Sound[s_BGM3_fast_mp3].play({loops:999});
-            	// instance.playMusic(s_BGM2_fast_mp3, true);
-                // instance.playBackgroundMusic("BGM3-fast.mp3", true);
                 break;
         }
+
+        bgmNumber = null;
 	},
 
 	stopAllBackgroundMusic:function()
@@ -1165,8 +1094,6 @@ var MenuLayer = cc.Layer.extend
     {
     	GameCache.save();
     }
-    
-    // keyBackClicked:function(){}
 });
 
 var MenuScene = cc.Scene.extend
