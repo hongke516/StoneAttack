@@ -256,6 +256,9 @@ var GameLayer = cc.Layer.extend
 	    // var buf = MeteorSprite.createShield(rangeX);
 	    // this.addChild(buf, 6);
 	    // this.arrayMeteorites.push(buf);
+
+	    randNum = null;
+	    rangeX = null;
 	},
 	
 	makeMeteorMaker:function()
@@ -265,6 +268,8 @@ var GameLayer = cc.Layer.extend
 		buf.construct(Math.floor(Math.random() * 360));	    
 	    this.arrayMeteorMaker.push(buf);
 	    cc.log("메이커 : " + this.arrayMeteorMaker.length + "\n스코어 : " + this.realMeteorScore);
+
+	    buf = null;
 	},
 
 	collidePlanet:function(meteor)
@@ -349,6 +354,10 @@ var GameLayer = cc.Layer.extend
 	    this.labelComboNum.setString(this.currentCombo + "");
 	    
 	    this.startComboEffect();
+
+	    dx = null;
+	    x = null;
+	    y = null;
 	},
 	
 	collidePlayer:function(meteor)
@@ -424,6 +433,8 @@ var GameLayer = cc.Layer.extend
 	        // var action = cc.Sequence.create(scalePlus, actionTo, null);
 	        this.sprShield.runAction(/*action*/scalePlus);
 	        this.schedule(this.stopShield, 0, false, 0.1);
+
+	        scalePlus = null;
 	        return;
 	        //CCSequence.actions(액션,CCCallFuncN.actionWithTarget(this, callfuncN_selector(네임 스페이스.finishChk)), NULL);
 	    }
@@ -436,6 +447,10 @@ var GameLayer = cc.Layer.extend
 	        var perTime = this.remainShieldCoolTime / this.remainShieldCoolTimeMax;
 	        this.sprShield.setTexture(cc.TextureCache.getInstance().addImage(perTime >= 0.8 ? s_shieldcircle_png : perTime >= 0.6 ? 
 	        	s_shieldcircledmg1_png : perTime >= 0.4 ? s_shieldcircledmg2_png : perTime >= 0.4 ? s_shieldcircledmg3_png : s_shieldcircledmg4_png));
+
+	        scaleAction = null;
+	        scaleActionReverse = null;
+	        perTime = null;
 	    }	    
 	},
 	
@@ -944,6 +959,8 @@ var GameLayer = cc.Layer.extend
 	            break;
 	    }
 	    this.sprCharacter.setFlipX(this.runMode < 0);
+
+	    absNum = null;
 	},
 	
 	updateGameOverCoolTime:function()
@@ -996,6 +1013,14 @@ var GameLayer = cc.Layer.extend
 	        this.labelComboNum.runAction(cc.Sequence.create(scaleAction, scaleActionReverse, null));
 	        this.labelCombo.runAction(cc.Sequence.create(scaleAction2, scaleActionReverse2, null));
 	        this.labelComboMul.runAction(cc.Sequence.create(scaleAction3, scaleActionReverse3, null));
+
+	        temp = null;
+	        scaleAction = null;
+	        scaleActionReverse = null;
+	        scaleAction2 = null;
+	        scaleActionReverse2 = null;
+	        scaleAction3 = null;
+	        scaleActionReverse3 = null;
 	    }
 	},
 	
@@ -1056,6 +1081,8 @@ var GameLayer = cc.Layer.extend
                 // instance.playBackgroundMusic("BGM3-fast.mp3", true);
                 break;
         }
+
+        bgmNumber = null;
 	},
 	
 	stopAllBackgroundMusic:function()
@@ -1586,7 +1613,9 @@ var GameLayer = cc.Layer.extend
     	var sprBackground = cc.Sprite.create(s_GameScene_background_png);
     	sprBackground.setScale(1.5);
     	sprBackground.setPosition(cc.p(GameData.planetCenterX, 300));
-    	this.addChild(sprBackground, 1);	
+    	this.addChild(sprBackground, 1);
+
+    	sprBackground = null;	
     },
 	
     initSpritePlanet:function()
@@ -1629,6 +1658,8 @@ var GameLayer = cc.Layer.extend
 	    var barSize = this.sprHpBar.getContentSize();
 	    this.stateBarWidth = barSize.width;
 	    this.stateBarHeight = barSize.height;
+
+	    barSize = null;
 	},
 	
 	initBMFont:function()
@@ -1728,6 +1759,11 @@ var GameLayer = cc.Layer.extend
 	    
 	    this.layerPauseMenu.setVisible(false);
 	    this.addChild(this.layerPauseMenu, 10);
+
+	    menuItemResume = null;
+	    menuItemRestart = null;
+	    menuItemExit = null;
+	    menuItemSetting = null;
 	},
 	
 	initSpriteShield:function()
@@ -1902,6 +1938,16 @@ var GameLayer = cc.Layer.extend
 	        this.menuBtnSetting.setEnabled(false);
 	    }
 	    this.addChild(this.menuBtnSetting);
+
+	    sprOptionBox = null;
+	    sprOptionTitle = null;
+		menuItemOptionExit = null;
+	    menuOptionExit = null;
+	    sprOptionBGM = null;
+	    menuItemBgmChoiceLeft = null;
+	    menuItemBgmChoiceRight = null;
+	    menuBgmChoiceLeft = null;
+	    menuBgmChoiceRight = null;
     },
 
 	initGameover:function()
