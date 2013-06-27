@@ -997,31 +997,31 @@ var GameLayer = cc.Layer.extend
         switch(bgmNumber)
         {
             case 1:
-  				SoundControl.Sound[s_BGM1_normal_mp3].play({loop:999});          
+  				SoundControl.Sound[s_BGM1_normal_mp3].play({loops:999});          
                 // instance.playBackgroundMusic("BGM1-normal.mp3", true);
                 break;
             case 2:
-            	SoundControl.Sound[s_BGM2_normal_mp3].play({loop:999});
+            	SoundControl.Sound[s_BGM2_normal_mp3].play({loops:999});
                 // instance.playBackgroundMusic("BGM2-normal.mp3", true);
                 break;
             case 3:
-            	SoundControl.Sound[s_BGM3_normal_mp3].play({loop:999});
+            	SoundControl.Sound[s_BGM3_normal_mp3].play({loops:999});
                 // instance.playBackgroundMusic("BGM3-normal.mp3", true);
                 break;
             case 4:
-	            SoundControl.Sound[s_BGM4_fast_mp3].play({loop:999});
+	            SoundControl.Sound[s_BGM4_fast_mp3].play({loops:999});
                 // instance.playBackgroundMusic("BGM4-fast.mp3", true);
                 break;
             case 5:
-            	SoundControl.Sound[s_BGM1_fast_mp3].play({loop:999});
+            	SoundControl.Sound[s_BGM1_fast_mp3].play({loops:999});
                 // instance.playBackgroundMusic("BGM1-fast.mp3", true);
                 break;
             case 6:
-            	SoundControl.Sound[s_BGM2_fast_mp3].play({loop:999});
+            	SoundControl.Sound[s_BGM2_fast_mp3].play({loops:999});
                 // instance.playBackgroundMusic("BGM2-fast.mp3", true);
                 break;
             case 7:
-            	SoundControl.Sound[s_BGM3_fast_mp3].play({loop:999});
+            	SoundControl.Sound[s_BGM3_fast_mp3].play({loops:999});
                 // instance.playBackgroundMusic("BGM3-fast.mp3", true);
                 break;
         }
