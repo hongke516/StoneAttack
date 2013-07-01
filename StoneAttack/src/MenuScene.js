@@ -378,7 +378,7 @@ var MenuLayer = cc.Layer.extend
 	        this.labelToStartPeriod = 0;
 	    }
 	    
-	    this.sprBalloon.setVisible(this.labelToStartPeriod < 90 ? true : false);		
+////	    this.sprBalloon.setVisible(this.labelToStartPeriod < 90 ? true : false);		
 	},
 	
 	updateCharAnimation:function()

@@ -18,7 +18,7 @@ var RatingLayer = cc.Layer.extend
 		labelText.setColor(cc.c3b(0, 0, 0));
 		layerColor.addChild(labelText);
 
-		var spriteRating = cc.Sprite.create("res/All_Rating_300.png");
+		var spriteRating = cc.Sprite.create(s_All_Rating_300_png);
 		spriteRating.setPosition(cc.p(832, 520));
 		spriteRating.setScale(0.5);
 		layerColor.addChild(spriteRating);
@@ -27,6 +27,18 @@ var RatingLayer = cc.Layer.extend
         this.schedule(this.nextScene, 0.0, false, 2.0);
         
         GameCache.load();
+
+        // // if(navigator.userAgent == 'Microsoft Internet Explorer')
+		// if(window.chrome != undefined)
+		// {
+			// // cc.log("Fasds");
+			// document.alert("로딩이 되지 않는다면, 다른 브라우저를 사용해주십시요.");	
+		// }
+		// else if(navigator.appName == 'Microsoft Internet Explorer')
+		// {
+			// cc.log("Fds");
+		// }
+		
         
         size = null;
         layerColor = null;

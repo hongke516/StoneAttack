@@ -111,8 +111,9 @@ var MeteorSprite = {
 					this.items[i] = null;
 				}
 			}
-			else if(GameData.gameScene.remainHitCoolTime == 0 && x > GameData.playerRectX1 && x < GameData.playerRectX2 &&
-				y > GameData.playerRectY1 && y < GameData.playerRectY2)
+			else if(x > GameData.playerRectX1 && x < GameData.playerRectX2 &&
+				y > GameData.playerRectY1 && y < GameData.playerRectY2 &&
+				((this.items[i].isShield || this.items[i].isHp) || GameData.gameScene.remainHitCoolTime == 0))
 			{
 				if(!(this.items[i].isShield || this.items[i].isHp))
 				{
