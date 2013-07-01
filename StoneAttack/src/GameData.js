@@ -115,7 +115,7 @@
 	GameData.cosTable = [];
 	GameData.sinTable = [];
 	
-	// sinTable, cosTable 입력 -> 이 방식이 느리긴 한데 중석이가 이방식을 좋아함.
+	// sinTable, cosTable 입력.
 	for(var i = 0; i < 360; i++)
 	{
 		var radian = i * Math.PI / 180.0;
